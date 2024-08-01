@@ -1,5 +1,12 @@
 class World {
 
+    bgObjects = [
+        new BgObject('../img/5_background/layers/air.png', 0, 0),
+        new BgObject('../img/5_background/layers/3_third_layer/1.png', 0, 75),
+        new BgObject('../img/5_background/layers/2_second_layer/1.png', 0, 75),
+        new BgObject('../img/5_background/layers/1_first_layer/1.png', 0, 75)
+    ]
+
     character = new Character();    
     
     enemies = [
@@ -7,29 +14,73 @@ class World {
         new Chicken(),
         new Chicken()
     ];
+
+    clouds = [
+        new Cloud()
+    ];
+
     canvas;
-
     ctx;
+    keyboard;
 
-    constructor(canvas) {
+    constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
-        this.canvas = canvas
+        this.canvas = canvas;
+        this.keyboard = keyboard;
         this.draw();
+        this.setWorld();
+    }
+
+    /**
+     * Übergabe der World-Funktionen an Character.
+     * Relevant für Keyboard-Übergabe
+     */
+    setWorld() { 
+        this.character.world = this;
     }
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height);
-        this.enemies.forEach(enemy => {
-            this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
-        })
-
+        this.addObjectsToMap(this.bgObjects);
+        this.addObjectsToMap(this.clouds);
+        this.addToMap(this.character);
+        this.addObjectsToMap(this.enemies);
 
         //draw() wird immer wieder aufgerufen
         let self = this;
         requestAnimationFrame(function() {
             self.draw();
         });
+    }
+
+    addObjectsToMap(objects) {
+        objects.forEach(o => {
+            this.addToMap(o);
+        });
+    }
+
+    addToMap(mo) {
+        if(mo.backwards) {
+            this.flipImage(mo);
+        }
+
+        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
+
+        if (mo.backwards) {
+            this.flipImageBack(mo);
+        }
+    }
+
+    flipImage(mo) {
+        this.ctx.save(); //Eigenschaften gespeichert
+        this.ctx.translate(mo.width, 0); // Bild spiegeln
+        this.ctx.scale(-1, 1); //Verschieben nach rechts
+        mo.x = mo.x * -1; // X-Koordinate spiegeln
+    }
+
+    flipImageBack(mo) {
+        mo.x = mo.x * -1; // X-Koordinate spiegeln
+        this.ctx.restore();
     }
 }
