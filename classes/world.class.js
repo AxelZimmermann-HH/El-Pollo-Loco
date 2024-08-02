@@ -28,14 +28,18 @@ class World {
         this.character.world = this;
     }
 
+
+    //COLLISIONS
     checkCollisions() {
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
                if (this.character.isColliding(enemy)) {
-                console.log('Collision with character', enemy);
+                this.character.hit();
+
+                console.log(this.character.energy);
                }
             });
-        }, 50);
+        }, 1000);
     }
 
     draw() {
