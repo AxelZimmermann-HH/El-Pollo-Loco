@@ -13,6 +13,8 @@ class Character extends MovableObject {
     ];
     world; // Variable, durch die man auf die Funktionen in World zugreifen kann
     // Relevant für Keyboard-Übergabe
+
+    walking_sound = new Audio('../audio/walkingfast.mov');
     
     
     constructor() {
@@ -24,25 +26,26 @@ class Character extends MovableObject {
     animate() {
         // Movement
         setInterval(() => {
-            if (this.world.keyboard.RIGHT) {
+            this.walking_sound.pause();
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.x += this.speed;
                 this.backwards = false;
+                this.walking_sound.play();
             };
-            if (this.world.keyboard.LEFT) {
+
+            
+            if (this.world.keyboard.LEFT && this.x > 0) {
                 this.x -= this.speed;
                 this.backwards = true;
+                this.walking_sound.play();
             }
+            this.world.camera_x = -this.x +50;
         }, 1000 / 60);
     
 
         setInterval(() => {
             if (this.world.keyboard.RIGHT ||  this.world.keyboard.LEFT) {
-
-            // Walk animation    
-            let i = this.currentImage % this.IMAGES_WALKING.length; // let i = 7 % 6 => 1, Rest 1, modulu behält nur den Rest!
-            let path = this.IMAGES_WALKING[i];
-            this.img = this.imageCache[path];
-            this.currentImage++;
+            this.playAnimation(this.IMAGES_WALKING);
         }
         }, 50);
     }
