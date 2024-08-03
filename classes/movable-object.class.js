@@ -1,21 +1,12 @@
-class MovableObject {
-    x = 120;
-    y = 250;
-    img;
-    height = 150;
-    width = 100;
-    imageCache = [];
-    currentImage = 0;
+class MovableObject extends DrawableObject {
+    
     speed = 0.15;
     backwards = false;
     speedY = 0;
     acceleration = 2.5;
-    energy = 100;
     lastHit = 0;
-
-
-   
-    applyGravity(){
+  
+     applyGravity(){
         setInterval(() => {
             if(this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
@@ -26,7 +17,7 @@ class MovableObject {
                     this.speedY = 0; // Reset speed when character reaches the ground
                     
                 }
-            }
+              }
         }, 1000 / 25);
     };
     
@@ -34,33 +25,7 @@ class MovableObject {
         return this.y < 206;
     };
 
-
-    loadImage(path) {
-        this.img = new Image(); // image bereits vordefiniert
-        this.img.src = path;
-    }
-
-    loadImages(array){
-        array.forEach(path => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = img;
-        });
-    }
-
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-
-    drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof Endboss) {
-            ctx.beginPath();
-            ctx.lineWidth = '3';
-            ctx.strokeStyle = "blue";
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-        }
-    }
+    
 
     // character.isColliding(chicken)
     isColliding(mo) {

@@ -8,6 +8,9 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
+    statusHealth = new StatusHealth();
+    statusCoins = new StatusCoins();
+    statusBottles = new StatusBottles();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -35,6 +38,9 @@ class World {
             this.level.enemies.forEach((enemy) => {
                if (this.character.isColliding(enemy)) {
                 this.character.hit();
+                this.statusHealth.setPercentage(this.character.energy);
+                this.statusCoins.setPercentage(this.character.energy);
+                this.statusBottles.setPercentage(this.character.energy);
 
                 console.log(this.character.energy);
                }
@@ -42,9 +48,13 @@ class World {
         }, 1000);
     }
 
+
+
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        // X-Achse verschiebt sich für alle Elemente dazwischen
         this.ctx.translate(this.camera_x, 0);
 
         this.addObjectsToMap(this.level.bgObjects);
@@ -52,8 +62,14 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
         
-
+        // X-Achse verschiebt sich
         this.ctx.translate(-this.camera_x, 0);
+
+
+        this.addToMap(this.statusHealth);
+        this.addToMap(this.statusCoins);
+        this.addToMap(this.statusBottles);
+
 
         //draw() wird immer wieder aufgerufen
         let self = this;
@@ -61,6 +77,9 @@ class World {
             self.draw();
         });
     }
+
+
+
 
     addObjectsToMap(objects) {
         objects.forEach(o => {
@@ -80,6 +99,9 @@ class World {
             this.flipImageBack(mo);
         }
     }
+
+
+
 
     flipImage(mo) {
         this.ctx.save(); //Eigenschaften gespeichert

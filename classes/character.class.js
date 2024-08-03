@@ -14,7 +14,7 @@ class Character extends MovableObject {
     IMAGES_JUMP = [
         '../img/2_character_pepe/3_jump/J-31.png',
         '../img/2_character_pepe/3_jump/J-32.png',
-        '../img/2_character_pepe/3_jump/J-33.png',
+        '../img/2_character_pepe/3_jump/J-33.png', 
         '../img/2_character_pepe/3_jump/J-34.png',
         '../img/2_character_pepe/3_jump/J-35.png',
         '../img/2_character_pepe/3_jump/J-36.png',
@@ -75,7 +75,7 @@ class Character extends MovableObject {
             //JUMP
             if (this.world.keyboard.SPACE  && !this.isAboveGround()) {
                 this.jump();
-                this.jumping_sound.play();
+                // this.jumping_sound.play();
             };
 
             this.world.camera_x = -this.x +50;
