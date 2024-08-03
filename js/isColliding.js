@@ -1,9 +1,9 @@
 // Bessere Formel zur Kollisionsberechnung (Genauer)
-function isColliding(obj) {
-    return  (this.X + this.width) >= obj.X && this.X <= (obj.X + obj.width) && 
-            (this.Y + this.offsetY + this.height) >= obj.Y &&
-            (this.Y + this.offsetY) <= (obj.Y + obj.height) && 
-            obj.onCollisionCourse; 
+function isColliding(mo) {
+    return  (this.x + this.width) >= mo.x && this.x <= (mo.x + mo.width) && 
+            (this.y + this.offsetY + this.height) >= mo.y &&
+            (this.y + this.offsetY) <= (obj.y + mo.height) && 
+            mo.onCollisionCourse; 
 }
 
 // Optional: hiermit könnten wir schauen, ob ein Objekt 

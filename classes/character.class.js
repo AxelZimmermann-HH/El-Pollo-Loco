@@ -40,7 +40,7 @@ class Character extends MovableObject {
     // Relevant für Keyboard-Übergabe
 
     walking_sound = new Audio('../audio/walkingfast.mov');
-    jumping_sound = new Audio('../audio/arriba.mp3')
+    jumping_sound = new Audio('../audio/arriba.mp3');
     
     
     constructor() {

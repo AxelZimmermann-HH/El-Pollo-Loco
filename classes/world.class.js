@@ -1,6 +1,7 @@
 class World {
 
     character = new Character();  
+    throwableObjects = [ ];
 
     level = level1;
 
@@ -18,7 +19,7 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
-        this.checkCollisions();
+        this.run();
     }
 
     
@@ -33,19 +34,31 @@ class World {
 
 
     //COLLISIONS
-    checkCollisions() {
+    run() {
         setInterval(() => {
-            this.level.enemies.forEach((enemy) => {
-               if (this.character.isColliding(enemy)) {
-                this.character.hit();
-                this.statusHealth.setPercentage(this.character.energy);
-                this.statusCoins.setPercentage(this.character.energy);
-                this.statusBottles.setPercentage(this.character.energy);
+            this.checkCollisions();
+            this.checkThrowObjects();
+        }, 200);
+    };
 
-                console.log(this.character.energy);
-               }
-            });
-        }, 1000);
+    checkCollisions() {
+     this.level.enemies.forEach((enemy) => {
+        if (this.character.isColliding(enemy)) {
+         this.character.hit();
+         this.statusHealth.setPercentage(this.character.energy);
+         this.statusCoins.setPercentage(this.character.energy);
+         this.statusBottles.setPercentage(this.character.energy);
+
+         console.log(this.character.energy);
+        }
+     });
+    };
+
+    checkThrowObjects() {
+        if(this.keyboard.THR) {
+            let bottle = new ThrowableObject(this.character.x +60, this.character.y +100);
+            this.throwableObjects.push(bottle);
+        }
     }
 
 
@@ -58,14 +71,16 @@ class World {
         this.ctx.translate(this.camera_x, 0);
 
         this.addObjectsToMap(this.level.bgObjects);
+        this.addObjectsToMap(this.level.collectables);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
+        this.addObjectsToMap(this.throwableObjects);
         
         // X-Achse verschiebt sich
         this.ctx.translate(-this.camera_x, 0);
 
-
+        this
         this.addToMap(this.statusHealth);
         this.addToMap(this.statusCoins);
         this.addToMap(this.statusBottles);

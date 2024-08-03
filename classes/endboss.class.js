@@ -1,5 +1,5 @@
 class Endboss extends MovableObject {
-    x = 900; //überschreibt die Koordinate aus movableObject
+    x = 1500; //überschreibt die Koordinate aus movableObject
     y = 68;
     width = 348;  
     height = 406;  

@@ -22,21 +22,32 @@ class MovableObject extends DrawableObject {
     };
     
     isAboveGround() {
-        return this.y < 206;
+        if (this instanceof ThrowableObject) { //Throwable objects should always fall
+            return true
+        } else {
+            return this.y < 206;
+        }
     };
 
     
 
     // character.isColliding(chicken)
+    // isColliding2(mo) {
+    //     return (this.x + this.width) >= mo.x && 
+    //         this.x <= (mo.x + mo.width) && 
+    //         (this.y + this.height) >= mo.y &&
+    //         (this.y) <= (mo.y + mo.height);
+    // }
+
     isColliding(mo) {
         return (this.x + this.width) >= mo.x && 
-            this.x <= (mo.x + mo.width) && 
-            (this.y + this.height) >= mo.y &&
-            (this.y) <= (mo.y + mo.height);
+        this.x <= (mo.x + mo.width) && 
+        (this.y /*+ this.offsetY */+ this.height) >= mo.y &&
+        (this.y /*+ this.offsetY*/) <= (mo.y + mo.height)
     }
 
     hit() {
-        this.energy -= 10 ;
+        this.energy -= 1 ;
         if(this.energy <= 0) {
             this.energy = 0;
         } else {
