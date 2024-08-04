@@ -1,6 +1,0 @@
-class Coins extends Collectable {
-
-
-
-    
-}
