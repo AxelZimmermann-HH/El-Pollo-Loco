@@ -10,7 +10,7 @@ class StatusCoins extends DrawableObject {
     ];
 
     percentage = 100;
-    
+    currentCoins = 0;
 
     constructor() {
         super();
@@ -26,19 +26,15 @@ class StatusCoins extends DrawableObject {
         if (this.currentCoins >= 0 && this.currentCoins < this.IMAGES.length) {
             let path = this.IMAGES[this.currentCoins];
             this.img = this.imageCache[path];
-            if (this.currentCoins === this.IMAGES.length - 1) {
-                setTimeout(() => {
-                    this.currentCoins = 0;
-                    this.changeCoinsToBottle();
-                    this.updateCoinBar();
-                    
-
-                }, 1000); // Display the full bar for 1 second
-            }
         }
     }
 
-    
+    //Bspw. ext. function: setPercentage(60);
+    setPercentage(percentage) {
+        this.percentage = percentage;
+        let path = this.IMAGES[this.resolveImageIndex()];
+        this.img = this.imageCache[path];
+    }
 
     resolveImageIndex() {
         if (this.percentage == 100) {

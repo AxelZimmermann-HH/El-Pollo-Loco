@@ -10,7 +10,6 @@ class StatusBottles extends DrawableObject {
     ];
 
     percentage = 100;
-    
 
     constructor() {
         super();
@@ -19,14 +18,14 @@ class StatusBottles extends DrawableObject {
         this.y = 105;
         this.width = 240;
         this.height= 64;
-        this.updateBottleBar();
+        this.setPercentage(100);
     };
 
-    updateBottleBar() {
-        if (this.currentBottles >= 0 && this.currentBottles < this.IMAGES.length) {
-            let path = this.IMAGES[this.currentBottles];
-            this.img = this.imageCache[path];
-        }
+    //Bspw. ext. function: setPercentage(60);
+    setPercentage(percentage) {
+        this.percentage = percentage;
+        let path = this.IMAGES[this.resolveImageIndex()];
+        this.img = this.imageCache[path];
     }
 
     resolveImageIndex() {

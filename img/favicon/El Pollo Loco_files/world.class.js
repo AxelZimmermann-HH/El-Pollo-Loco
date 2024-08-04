@@ -48,6 +48,7 @@ class World {
         if (this.character.isColliding(enemy)) {
          this.character.hit();
          this.statusHealth.setPercentage(this.character.energy);
+         this.statusBottles.setPercentage(this.character.energy);
 
          console.log(this.character.energy);
         }
@@ -69,9 +70,6 @@ class World {
         this.level.bottles.forEach((bottle) => {
             if (this.character.isColliding(bottle)) {
                 bottle.y = -1000;
-                this.statusBottles.currentBottles++;
-                this.statusBottles.updateBottleBar();
-                console.log('coin');
              }
         })
     }
