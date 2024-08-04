@@ -37,7 +37,8 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisions();
-            this.collect();
+            this.collectBottles();
+            this.collectCoins();
             this.checkThrowObjects();
         }, 200);
     };
@@ -55,11 +56,20 @@ class World {
      });
     };
 
-    collect() {
-        this.level.collectables.forEach((collectable) => {
-            if (this.character.isColliding(collectable)) {
+    collectCoins() {
+        this.level.coins.forEach((coin) => {
+            if (this.character.isColliding(coin)) {
                 console.log('collected');
-                collectable.y = -1000;
+                coin.y = -1000;
+             }
+        })
+    }
+
+    collectBottles() {
+        this.level.bottles.forEach((bottle) => {
+            if (this.character.isColliding(bottle)) {
+                console.log('collected');
+                bottle.y = -1000;
              }
         })
     }
@@ -81,7 +91,9 @@ class World {
         this.ctx.translate(this.camera_x, 0);
 
         this.addObjectsToMap(this.level.bgObjects);
-        this.addObjectsToMap(this.level.collectables);
+        //this.addObjectsToMap(this.level.collectables);
+        this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);

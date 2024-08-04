@@ -29,24 +29,26 @@ let clouds = [
 //     clouds.push(new Cloud('../img/5_background/clouds/2.png', xOffset + 720, 50));
 // }
 
-let collectables = [
-    new Collectable('../img/8_coin/coin_2.png', 400, 180, 100, 100),
-    new Collectable('../img/8_coin/coin_2.png', 460, 150, 100, 100),
-    new Collectable('../img/8_coin/coin_2.png', 520, 180, 100, 100),
-    new Collectable('../img/8_coin/coin_2.png', 620, 150, 100, 100),
-    new Collectable('../img/8_coin/coin_2.png', 680, 240, 100, 100),
-    new Collectable('../img/8_coin/coin_2.png', 880, 150, 100, 100),
-    new Collectable('../img/8_coin/coin_2.png', 1000, 230, 100, 100),
-    new Collectable('../img/8_coin/coin_2.png', 1150, 200, 100, 100),
-    new Collectable('../img/8_coin/coin_2.png', 1225, 185, 100, 100),
-    new Collectable('../img/8_coin/coin_2.png', 1300, 170, 100, 100),
+let coins = [
+    new Coins('../img/8_coin/coin_2.png', 400, 180, 100, 100),
+    new Coins('../img/8_coin/coin_2.png', 460, 150, 100, 100),
+    new Coins('../img/8_coin/coin_2.png', 520, 180, 100, 100),
+    new Coins('../img/8_coin/coin_2.png', 620, 150, 100, 100),
+    new Coins('../img/8_coin/coin_2.png', 680, 240, 100, 100),
+    new Coins('../img/8_coin/coin_2.png', 880, 150, 100, 100),
+    new Coins('../img/8_coin/coin_2.png', 1000, 230, 100, 100),
+    new Coins('../img/8_coin/coin_2.png', 1150, 200, 100, 100),
+    new Coins('../img/8_coin/coin_2.png', 1225, 185, 100, 100),
+    new Coins('../img/8_coin/coin_2.png', 1300, 170, 100, 100),
+];
 
-    new Collectable('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 250, 360, 80, 80),
-    new Collectable('../img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 330, 360, 80, 80),
-    new Collectable('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 480, 360, 80, 80),
-    new Collectable('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 880, 360, 80, 80),
-    new Collectable('../img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 950, 360, 80, 80),
-    new Collectable('../img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 1300, 360, 80, 80)
+let bottles = [
+    new Bottle('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 250, 360, 80, 80),
+    new Bottle('../img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 330, 360, 80, 80),
+    new Bottle('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 480, 360, 80, 80),
+    new Bottle('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 880, 360, 80, 80),
+    new Bottle('../img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 950, 360, 80, 80),
+    new Bottle('../img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 1300, 360, 80, 80)
 ];  
 
 
@@ -62,9 +64,7 @@ const level1 = new Level(
     ],
 
     clouds,
-
-    
-
     bgObjects,
-    collectables
+    coins,
+    bottles
 );
