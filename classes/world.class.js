@@ -37,6 +37,7 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisions();
+            this.collect();
             this.checkThrowObjects();
         }, 200);
     };
@@ -53,6 +54,15 @@ class World {
         }
      });
     };
+
+    collect() {
+        this.level.collectables.forEach((collectable) => {
+            if (this.character.isColliding(collectable)) {
+                console.log('collected');
+                collectable.y = -1000;
+             }
+        })
+    }
 
     checkThrowObjects() {
         if(this.keyboard.THR) {
