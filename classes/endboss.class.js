@@ -3,6 +3,14 @@ class Endboss extends MovableObject {
     y = 68;
     width = 348;  
     height = 406;  
+
+    collisionBox = {
+        offsetX: 10,
+        offsetY: 60,
+        widthAdjustment: 20,
+        heightAdjustment: 70
+    };
+
     IMAGES_WALKING = [
         '../img/4_enemie_boss_chicken/2_alert/G5.png',
         '../img/4_enemie_boss_chicken/2_alert/G6.png',

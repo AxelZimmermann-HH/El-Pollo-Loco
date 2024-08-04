@@ -4,6 +4,13 @@ class Collectable extends MovableObject {
         '../img/8_coin/coin_1.png',
         '../img/8_coin/coin_2.png'
     ];
+
+    collisionBox = {
+        offsetX: 30,
+        offsetY: 30,
+        widthAdjustment: 60,
+        heightAdjustment: 60
+    };
     
     constructor(imagePath, x, y, w, h) {
         super();

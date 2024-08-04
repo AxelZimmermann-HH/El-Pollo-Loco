@@ -11,7 +11,7 @@ class MovableObject extends DrawableObject {
             if(this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
-                // Ensure y does not go below 206
+                 // Ensure y does not go below 206
                 if (this.y > 206) {
                     this.y = 206;
                     this.speedY = 0; // Reset speed when character reaches the ground
@@ -29,23 +29,38 @@ class MovableObject extends DrawableObject {
         }
     };
 
-    
-
-    // character.isColliding(chicken)
-    // isColliding2(mo) {
-    //     return (this.x + this.width) >= mo.x && 
-    //         this.x <= (mo.x + mo.width) && 
-    //         (this.y + this.height) >= mo.y &&
-    //         (this.y) <= (mo.y + mo.height);
-    // }
 
     isColliding(mo) {
-        return (this.x + this.width) >= mo.x && 
-        this.x <= (mo.x + mo.width) && 
-        (this.y /*+ this.offsetY */+ this.height) >= mo.y &&
-        (this.y /*+ this.offsetY*/) <= (mo.y + mo.height)
+        const thisCollisionBox = this.cutThisObject();
+        const moCollisionBox = this.cutOtherObject(mo);
+    
+        return (this.x + thisCollisionBox.offsetX + this.width - thisCollisionBox.widthAdjustment) >= (mo.x + moCollisionBox.offsetX) && 
+               (this.x + thisCollisionBox.offsetX) <= (mo.x + moCollisionBox.offsetX + mo.width - moCollisionBox.widthAdjustment) && 
+               (this.y + thisCollisionBox.offsetY + this.height - thisCollisionBox.heightAdjustment) >= (mo.y + moCollisionBox.offsetY) &&
+               (this.y + thisCollisionBox.offsetY) <= (mo.y + moCollisionBox.offsetY + mo.height - moCollisionBox.heightAdjustment);
     }
-
+    
+    cutThisObject() {
+        // Kollisionsbox-Daten für das aktuelle Objekt
+        const thisOffsetX = this.collisionBox?.offsetX || 0;
+        const thisOffsetY = this.collisionBox?.offsetY || 0;
+        const thisWidthAdjustment = this.collisionBox?.widthAdjustment || 0;
+        const thisHeightAdjustment = this.collisionBox?.heightAdjustment || 0;
+        return { offsetX: thisOffsetX, offsetY: thisOffsetY, 
+            widthAdjustment: thisWidthAdjustment, heightAdjustment: thisHeightAdjustment };
+    }
+    
+    cutOtherObject(mo) {
+        // Kollisionsbox-Daten für das andere Objekt
+        const moOffsetX = mo.collisionBox?.offsetX || 0;
+        const moOffsetY = mo.collisionBox?.offsetY || 0;
+        const moWidthAdjustment = mo.collisionBox?.widthAdjustment || 0;
+        const moHeightAdjustment = mo.collisionBox?.heightAdjustment || 0;
+        return { offsetX: moOffsetX, offsetY: moOffsetY, 
+            widthAdjustment: moWidthAdjustment, heightAdjustment: moHeightAdjustment };
+    }
+    
+    
     hit() {
         this.energy -= 1 ;
         if(this.energy <= 0) {

@@ -33,26 +33,28 @@ class DrawableObject {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     };
 
+
     drawFrame(ctx) {
         if (this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof Collectable) {
             ctx.beginPath();
             ctx.lineWidth = '3';
             ctx.strokeStyle = "blue";
-            ctx.rect(this.x, this.y, this.width, this.height);
-
-            // if (this instanceof Character) {
-            //     ctx.rect(this.x + 10, this.y + 90, this.width - 20, this.height - 100 ); // Beispielwerte für Character
-            // } else if (this instanceof Chicken) {
-            //     ctx.rect(this.x, this.y, this.width, this.height); // Beispielwerte für Chicken
-            // } else if (this instanceof Endboss) {
-            //     ctx.rect(this.x + 10, this.y + 60, this.width - 10, this.height -70); // Beispielwerte für Endboss
-            // } else if (this instanceof Collectable) {
-            //     ctx.rect(this.x, this.y, this.width, this.height); // Beispielwerte für Endboss
-            // }
-
+    
+            let offsetX = 0, offsetY = 0, widthAdjustment = 0, heightAdjustment = 0;
+    
+            if (this.collisionBox) {
+                offsetX = this.collisionBox.offsetX || 0;
+                offsetY = this.collisionBox.offsetY || 0;
+                widthAdjustment = this.collisionBox.widthAdjustment || 0;
+                heightAdjustment = this.collisionBox.heightAdjustment || 0;
+            }
+    
+            ctx.rect(this.x + offsetX, this.y + offsetY, this.width - widthAdjustment, this.height - heightAdjustment);
+    
             ctx.stroke();
         }
-    };
+    }
+    
 
     
 

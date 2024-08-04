@@ -3,6 +3,14 @@ class Character extends MovableObject {
     width = 120;  
     height = 240;  
     speed = 5;
+
+    collisionBox = {
+        offsetX: 20,
+        offsetY: 90,
+        widthAdjustment: 40,
+        heightAdjustment: 100
+    };
+
     IMAGES_WALKING = [
         '../img/2_character_pepe/2_walk/W-21.png',
         '../img/2_character_pepe/2_walk/W-22.png',
