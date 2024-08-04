@@ -6,7 +6,7 @@ class MovableObject extends DrawableObject {
     acceleration = 2.5;
     lastHit = 0;
   
-     applyGravity(){
+     gravityJump(){
         setInterval(() => {
             if(this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
@@ -83,4 +83,18 @@ class MovableObject extends DrawableObject {
     jump() {
         this.speedY = 25;
     }
+
+    playEndAnimationOnce(array, speed) {
+        this.loadImages(array);
+            let i = 0;
+            let splashInterval = setInterval(() => {
+                this.playAnimation([array[i]]);
+                i++;
+                if (i >= array.length) {
+                    clearInterval(splashInterval);
+                    // Optionally, hide the object or set it to a "disappeared" state
+                    this.y = -1000; // Move the object out of view
+                }
+            }, 1000 / speed);
+    };
 }
