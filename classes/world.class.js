@@ -12,6 +12,7 @@ class World {
     statusHealth;
     statusCoins;
     statusBottles;
+    statusEnemy;
     invulnerability = false;
     throwCooldown = false;
     
@@ -24,6 +25,7 @@ class World {
         this.statusBottles = new StatusBottles();
         this.statusCoins = new StatusCoins(this.statusBottles);
         this.statusHealth = new StatusHealth();
+        this.statusEnemy = new StatusEnemy();
 
         this.draw();
         this.setWorld();
@@ -54,15 +56,22 @@ class World {
 
     checkCollisions() {
         let enemiesToDefeat = [];
-
+    
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
                 this.addEnemyToDefeat(enemiesToDefeat, enemy);
             }
         });
-
+    
+        this.level.endboss.forEach((boss) => {
+            if (this.character.isColliding(boss)) {
+                this.addEnemyToDefeat(enemiesToDefeat, boss);
+            }
+        });
+    
         this.handleDefeatedEnemies(enemiesToDefeat);
-    };
+    }
+    
 
     addEnemyToDefeat(enemiesToDefeat, enemy) {
         let thisCollisionBox = this.character.cutThisObject();
@@ -122,11 +131,11 @@ class World {
 
     checkThrowObjects() {
         if (this.keyboard.THR && this.statusBottles.currentBottles > 0 && !this.throwCooldown) {
-            let bottle = new ThrowableObject(this.character.x + 60, this.character.y + 100);
+            let bottle = new ThrowableObject(this, this.character.x + 60, this.character.y + 100);
             this.throwableObjects.push(bottle);
             this.statusBottles.currentBottles--;
             this.statusBottles.updateBottleBar();
-            this.setThrowCooldown(400); // Setzt den Cooldown auf 1 Sekunde
+            this.setThrowCooldown(400); 
         }
     };
 
@@ -149,6 +158,7 @@ class World {
         this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.endboss);
         this.addToMap(this.character);
         this.addObjectsToMap(this.throwableObjects);
         
@@ -158,6 +168,7 @@ class World {
         this.addToMap(this.statusHealth);
         this.addToMap(this.statusCoins);
         this.addToMap(this.statusBottles);
+        this.addToMap(this.statusEnemy);
 
 
         //draw() wird immer wieder aufgerufen

@@ -4,6 +4,13 @@ class ThrowableObject extends MovableObject {
 width = 80;
 height = 80;
 
+collisionBox = {
+    offsetX: 10,
+    offsetY: 10,
+    widthAdjustment: 30,
+    heightAdjustment: 30
+};
+
 IMAGES_ROTATE = [
     '../img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
     '../img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
@@ -22,8 +29,9 @@ IMAGES_SPLASH = [
 
 
 
-constructor(x, y) {
+constructor(world, x, y) {
     super().loadImage('../img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
+    this.world = world;
     this.loadImages(this.IMAGES_ROTATE);
     this.x = x;
     this.y = y;
@@ -33,29 +41,30 @@ constructor(x, y) {
 
 throw() {
     this.speedY = 30;
-    this.gravityThrow();
+    this.throwLogic();
     this.horizontalMovementInterval = setInterval(() => {
         this.x += 25;
         this.playAnimation(this.IMAGES_ROTATE);
-        if (this.y >= 356) { // Additional check to stop horizontal movement
-            clearInterval(this.horizontalMovementInterval);
-        }
     }, 70);
 }
 
 
-gravityThrow(){
+throwLogic(){
     let interval = setInterval(() => {
         if (this.isAboveGround() || this.speedY > 0) {
             this.y -= this.speedY;
             this.speedY -= this.acceleration;
-            if (this.y >= 386) { // Stop the object when it reaches y = 356
+            this.world.level.endboss.forEach((endboss) => {
+                if (this.isColliding(endboss)) {
+                    this.splashAnimation(interval, this.IMAGES_SPLASH, 25);
+                    this.world.statusEnemy.reduceEnergy(this.world.level.endboss, 0);
+                }
+            });
+            if (this.y >= 386) {
                 this.y = 386;
                 this.splashAnimation(interval, this.IMAGES_SPLASH, 25);
             }
-        } else {
-            clearInterval(interval);
-        }
+        } 
     }, 1000 / 25);
 };
 
