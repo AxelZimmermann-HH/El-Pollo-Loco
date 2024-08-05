@@ -32,13 +32,15 @@ class MovableObject extends DrawableObject {
 
     isColliding(mo) {
         const thisCollisionBox = this.cutThisObject();
-        const moCollisionBox = this.cutOtherObject(mo);
+        const moCollisionBox = mo.cutOtherObject(mo);
+        const buffer = 5; // Adding a buffer to make collision detection more precise
     
-        return (this.x + thisCollisionBox.offsetX + this.width - thisCollisionBox.widthAdjustment) >= (mo.x + moCollisionBox.offsetX) && 
-               (this.x + thisCollisionBox.offsetX) <= (mo.x + moCollisionBox.offsetX + mo.width - moCollisionBox.widthAdjustment) && 
-               (this.y + thisCollisionBox.offsetY + this.height - thisCollisionBox.heightAdjustment) >= (mo.y + moCollisionBox.offsetY) &&
-               (this.y + thisCollisionBox.offsetY) <= (mo.y + moCollisionBox.offsetY + mo.height - moCollisionBox.heightAdjustment);
+        return (this.x + thisCollisionBox.offsetX + this.width - thisCollisionBox.widthAdjustment + buffer) >= (mo.x + moCollisionBox.offsetX) &&
+               (this.x + thisCollisionBox.offsetX - buffer) <= (mo.x + moCollisionBox.offsetX + mo.width - moCollisionBox.widthAdjustment) &&
+               (this.y + thisCollisionBox.offsetY + this.height - thisCollisionBox.heightAdjustment + buffer) >= (mo.y + moCollisionBox.offsetY) &&
+               (this.y + thisCollisionBox.offsetY - buffer) <= (mo.y + moCollisionBox.offsetY + mo.height - moCollisionBox.heightAdjustment);
     }
+    
     
     cutThisObject() {
         // Kollisionsbox-Daten für das aktuelle Objekt
@@ -62,7 +64,7 @@ class MovableObject extends DrawableObject {
     
     
     hit() {
-        this.energy -= 1 ;
+        this.energy -= 0.2 ;
         if(this.energy <= 0) {
             this.energy = 0;
         } else {

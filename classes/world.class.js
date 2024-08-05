@@ -12,6 +12,7 @@ class World {
     statusHealth;
     statusCoins;
     statusBottles;
+    invulnerability = false;
     
 
     constructor(canvas, keyboard) {
@@ -46,19 +47,56 @@ class World {
             this.collectBottles();
             this.collectCoins();
             this.checkThrowObjects();
-        }, 200);
+        }, 1000 / 60);
     };
+    
+
+    
 
     checkCollisions() {
-     this.level.enemies.forEach((enemy) => {
-        if (this.character.isColliding(enemy)) {
-         this.character.hit();
-         this.statusHealth.setPercentage(this.character.energy);
+        let enemiesToDefeat = [];
 
-         console.log(this.character.energy);
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy)) {
+                this.addEnemyToDefeat(enemiesToDefeat, enemy);
+            }
+        });
+
+        this.handleDefeatedEnemies(enemiesToDefeat);
+    }
+
+    addEnemyToDefeat(enemiesToDefeat, enemy) {
+        let thisCollisionBox = this.character.cutThisObject();
+        let enemyCollisionBox = enemy.cutOtherObject(enemy);
+        let characterBottom = this.character.y + this.character.height - thisCollisionBox.heightAdjustment;
+        let enemyTop = enemy.y + enemyCollisionBox.offsetY;
+
+        if (characterBottom <= enemyTop + 5 && this.character.speedY < 0) {
+            enemiesToDefeat.push(enemy);
+            this.setInvulnerability(50);
+        } else if (!this.invulnerability) {
+            this.characterHurt();
         }
-     });
-    };
+    }
+
+    setInvulnerability(duration) {
+        this.invulnerability = true;
+        setTimeout(() => {
+            this.invulnerability = false;
+        }, duration);
+    }
+
+    characterHurt() {
+        this.character.hit();
+        this.statusHealth.setPercentage(this.character.energy);
+    }
+
+    handleDefeatedEnemies(enemiesToDefeat) {
+        if (enemiesToDefeat.length > 0) {
+            enemiesToDefeat.forEach(enemy => enemy.defeat());
+            this.character.speedY = 20; // Lässt den Charakter abprallen
+        }
+    }
 
     collectCoins() {
         this.level.coins.forEach((coin) => {
@@ -66,7 +104,6 @@ class World {
                 coin.y = -1000;
                 this.statusCoins.currentCoins++;
                 this.statusCoins.updateCoinBar();
-                console.log('coin');
              }
         })
     }
