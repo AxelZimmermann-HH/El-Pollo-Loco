@@ -9,14 +9,20 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
-    statusHealth = new StatusHealth();
-    statusCoins = new StatusCoins();
-    statusBottles = new StatusBottles();
+    statusHealth;
+    statusCoins;
+    statusBottles;
+    
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+
+        this.statusBottles = new StatusBottles();
+        this.statusCoins = new StatusCoins(this.statusBottles);
+        this.statusHealth = new StatusHealth();
+
         this.draw();
         this.setWorld();
         this.run();
@@ -69,22 +75,23 @@ class World {
         this.level.bottles.forEach((bottle) => {
             if (this.character.isColliding(bottle)) {
                 bottle.y = -1000;
-                this.statusBottles.currentBottles++;
-                this.statusBottles.updateBottleBar();
-                console.log('coin');
+                if (this.statusBottles.currentBottles < 5) {
+                    this.statusBottles.currentBottles++;
+                    this.statusBottles.updateBottleBar();    
+                }
+                this.statusBottles.animateBottleEffect();
              }
         })
     }
 
     checkThrowObjects() {
-        if(this.keyboard.THR) {
+        if(this.keyboard.THR && this.statusBottles.currentBottles > 0) {
             let bottle = new ThrowableObject(this.character.x +60, this.character.y +100);
             this.throwableObjects.push(bottle);
+            this.statusBottles.currentBottles--;
+            this.statusBottles.updateBottleBar();
         }
     }
-
-
-
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -104,7 +111,6 @@ class World {
         // X-Achse verschiebt sich
         this.ctx.translate(-this.camera_x, 0);
 
-        this
         this.addToMap(this.statusHealth);
         this.addToMap(this.statusCoins);
         this.addToMap(this.statusBottles);

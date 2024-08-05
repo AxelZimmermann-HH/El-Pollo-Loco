@@ -9,16 +9,17 @@ class StatusBottles extends DrawableObject {
         '../img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/100.png'
     ];
 
-    percentage = 100;
-    
+    currentBottles = 0;
+    originalWidth = 240;
+    originalHeight = 64;
 
     constructor() {
         super();
         this.loadImages(this.IMAGES);
         this.x = 10;
         this.y = 105;
-        this.width = 240;
-        this.height= 64;
+        this.width = this.originalWidth;
+        this.height = this.originalHeight;
         this.updateBottleBar();
     };
 
@@ -29,19 +30,42 @@ class StatusBottles extends DrawableObject {
         }
     }
 
-    resolveImageIndex() {
-        if (this.percentage == 100) {
-            return 5;
-        } else if (this.percentage > 80) {
-            return 4;
-        } else if (this.percentage > 60) {
-            return 3;
-        } else if (this.percentage > 40) {
-            return 2;
-        } else if (this.percentage > 20) {
-            return 1;
-        } else {
-            return 0;
+    addBottle() {
+        if (this.currentBottles < 5) {
+            this.currentBottles++;
+            console.log('Bottle added:', this.currentBottles);
+            this.updateBottleBar();
+        }
+        this.animateBottleEffect();
+    }
+
+    animateBottleEffect() {
+        let scale = 1;
+        let scaleStep = 0.05;
+        let maxScale = 1.5;
+        let minScale = 1;
+        let growing = true;
+
+        let animate = () => {
+            if (growing) {
+                scale += scaleStep;
+                if (scale >= maxScale) {
+                    growing = false;
+                }
+            } else {
+                scale -= scaleStep;
+                if (scale <= minScale) {
+                    this.width = this.originalWidth;
+                    this.height = this.originalHeight;
+                    return; // End the animation
+                }
+            }
+
+            this.width = this.originalWidth * scale;
+            this.height = this.originalHeight * scale;
+            requestAnimationFrame(animate);
         };
-    };
+
+        animate();
+    }
 }

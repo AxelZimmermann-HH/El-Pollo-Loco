@@ -49,8 +49,8 @@ gravityThrow(){
         if (this.isAboveGround() || this.speedY > 0) {
             this.y -= this.speedY;
             this.speedY -= this.acceleration;
-            if (this.y >= 356) { // Stop the object when it reaches y = 356
-                this.y = 356;
+            if (this.y >= 386) { // Stop the object when it reaches y = 356
+                this.y = 386;
                 this.splashAnimation(interval, this.IMAGES_SPLASH, 25);
             }
         } else {

@@ -9,11 +9,13 @@ class StatusCoins extends DrawableObject {
         '../img/7_statusbars/1_statusbar/1_statusbar_coin/orange/100.png'
     ];
 
-    percentage = 100;
+    statusBottles;
+    currentCoins = 0;
     
 
-    constructor() {
+    constructor(statusBottles) {
         super();
+        this.statusBottles = statusBottles;
         this.loadImages(this.IMAGES);
         this.x = 10;
         this.y = 50;
@@ -38,21 +40,17 @@ class StatusCoins extends DrawableObject {
         }
     }
 
-    
+    changeCoinsToBottle() {
+        this.statusBottles.addBottle();
+    }
 
-    resolveImageIndex() {
-        if (this.percentage == 100) {
-            return 5;
-        } else if (this.percentage > 80) {
-            return 4;
-        } else if (this.percentage > 60) {
-            return 3;
-        } else if (this.percentage > 40) {
-            return 2;
-        } else if (this.percentage > 20) {
-            return 1;
+    addCoin() {
+        if (this.currentCoins < this.IMAGES.length - 1) {
+            this.currentCoins++;
+            this.updateCoinBar();
         } else {
-            return 0;
-        };
-    };
+            this.currentCoins = this.IMAGES.length - 1;
+            this.updateCoinBar();
+        }
+    }
 }

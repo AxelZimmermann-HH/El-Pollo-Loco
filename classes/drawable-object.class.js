@@ -8,13 +8,11 @@ class DrawableObject {
     currentImage = 0;
     energy = 100;
 
-    currentCoins = 0;
-    currentBottles = 0;
+    
 
     constructor() {
 
     };
-
 
 
 
@@ -56,12 +54,4 @@ class DrawableObject {
             ctx.stroke();
         }
     }
-
-    changeCoinsToBottle() {
-        this.currentBottles++;
-    }
-    
-
-    
-
 }
