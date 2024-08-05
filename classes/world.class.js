@@ -13,6 +13,7 @@ class World {
     statusCoins;
     statusBottles;
     invulnerability = false;
+    throwCooldown = false;
     
 
     constructor(canvas, keyboard) {
@@ -28,8 +29,6 @@ class World {
         this.setWorld();
         this.run();
     }
-
-    
 
     /**
      * Übergabe der World-Funktionen an Character.
@@ -63,7 +62,7 @@ class World {
         });
 
         this.handleDefeatedEnemies(enemiesToDefeat);
-    }
+    };
 
     addEnemyToDefeat(enemiesToDefeat, enemy) {
         let thisCollisionBox = this.character.cutThisObject();
@@ -77,26 +76,26 @@ class World {
         } else if (!this.invulnerability) {
             this.characterHurt();
         }
-    }
+    };
 
     setInvulnerability(duration) {
         this.invulnerability = true;
         setTimeout(() => {
             this.invulnerability = false;
         }, duration);
-    }
+    };
 
     characterHurt() {
         this.character.hit();
         this.statusHealth.setPercentage(this.character.energy);
-    }
+    };
 
     handleDefeatedEnemies(enemiesToDefeat) {
         if (enemiesToDefeat.length > 0) {
             enemiesToDefeat.forEach(enemy => enemy.defeat());
             this.character.speedY = 20; // Lässt den Charakter abprallen
         }
-    }
+    };
 
     collectCoins() {
         this.level.coins.forEach((coin) => {
@@ -106,7 +105,7 @@ class World {
                 this.statusCoins.updateCoinBar();
              }
         })
-    }
+    };
 
     collectBottles() {
         this.level.bottles.forEach((bottle) => {
@@ -119,16 +118,24 @@ class World {
                 this.statusBottles.animateBottleEffect();
              }
         })
-    }
+    };
 
     checkThrowObjects() {
-        if(this.keyboard.THR && this.statusBottles.currentBottles > 0) {
-            let bottle = new ThrowableObject(this.character.x +60, this.character.y +100);
+        if (this.keyboard.THR && this.statusBottles.currentBottles > 0 && !this.throwCooldown) {
+            let bottle = new ThrowableObject(this.character.x + 60, this.character.y + 100);
             this.throwableObjects.push(bottle);
             this.statusBottles.currentBottles--;
             this.statusBottles.updateBottleBar();
+            this.setThrowCooldown(400); // Setzt den Cooldown auf 1 Sekunde
         }
-    }
+    };
+
+    setThrowCooldown(duration) {
+        this.throwCooldown = true;
+        setTimeout(() => {
+            this.throwCooldown = false;
+        }, duration);
+    };
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -158,16 +165,13 @@ class World {
         requestAnimationFrame(function() {
             self.draw();
         });
-    }
-
-
-
+    };
 
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);
         });
-    }
+    };
 
     addToMap(mo) {
         if(mo.backwards) {
@@ -180,20 +184,17 @@ class World {
         if (mo.backwards) {
             this.flipImageBack(mo);
         }
-    }
-
-
-
+    };
 
     flipImage(mo) {
         this.ctx.save(); //Eigenschaften gespeichert
         this.ctx.translate(mo.width, 0); // Bild spiegeln
         this.ctx.scale(-1, 1); //Verschieben nach rechts
         mo.x = mo.x * -1; // X-Koordinate spiegeln
-    }
+    };
 
     flipImageBack(mo) {
         mo.x = mo.x * -1; // X-Koordinate spiegeln
         this.ctx.restore();
-    }
+    };
 }

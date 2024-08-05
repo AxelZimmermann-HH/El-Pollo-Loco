@@ -42,7 +42,31 @@ class Character extends MovableObject {
         '../img/2_character_pepe/4_hurt/H-41.png',
         '../img/2_character_pepe/4_hurt/H-42.png',
         '../img/2_character_pepe/4_hurt/H-43.png'
-    ]
+    ];
+    IMAGES_IDLE = [
+        '../img/2_character_pepe/1_idle/idle/I-1.png',
+        '../img/2_character_pepe/1_idle/idle/I-2.png',
+        '../img/2_character_pepe/1_idle/idle/I-3.png',
+        '../img/2_character_pepe/1_idle/idle/I-4.png',
+        '../img/2_character_pepe/1_idle/idle/I-5.png',
+        '../img/2_character_pepe/1_idle/idle/I-6.png',
+        '../img/2_character_pepe/1_idle/idle/I-7.png',
+        '../img/2_character_pepe/1_idle/idle/I-8.png',
+        '../img/2_character_pepe/1_idle/idle/I-9.png',
+        '../img/2_character_pepe/1_idle/idle/I-10.png'
+    ];
+    IMAGES_IDLE_LONG = [
+        '../img/2_character_pepe/1_idle/long_idle/I-11.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-12.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-13.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-14.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-15.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-16.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-17.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-18.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-19.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-20.png'
+    ];
 
     world; // Variable, durch die man auf die Funktionen in World zugreifen kann
     // Relevant für Keyboard-Übergabe
@@ -50,17 +74,36 @@ class Character extends MovableObject {
     walking_sound = new Audio('../audio/walkingfast.mov');
     jumping_sound = new Audio('../audio/arriba.mp3');
     
+    lastKeyPressTime = 0;
     
     constructor() {
-        super().loadImage('../img/2_character_pepe/2_walk/W-21.png');
+        super().loadImage(this.IMAGES_IDLE[0]);
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMP);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_IDLE);
+        this.loadImages(this.IMAGES_IDLE_LONG);
         this.gravityJump();
         this.animate();
+        this.startInitialIdleAnimation();
+    }
+
+    startInitialIdleAnimation() {
+        this.lastKeyPressTime = Date.now(); // Set initial key press time
+
+        setInterval(() => {
+            const timeSinceLastKeyPress = Date.now() - this.lastKeyPressTime;
+            if (timeSinceLastKeyPress > 10000) { // 4 seconds delay
+                this.playAnimation(this.IMAGES_IDLE_LONG);
+            } else if (timeSinceLastKeyPress > 10) { // 1 second delay
+                this.playAnimation(this.IMAGES_IDLE);
+            }
+        }, 400);
+    
     };
 
+    
     animate() {
         // Movement
         setInterval(() => {
@@ -71,6 +114,7 @@ class Character extends MovableObject {
                 this.moveRight();
                 this.backwards = false;
                 this.walking_sound.play();
+                this.lastKeyPressTime = Date.now();
             };
 
             
@@ -78,11 +122,13 @@ class Character extends MovableObject {
                 this.moveLeft();
                 this.backwards = true;
                 this.walking_sound.play();
+                this.lastKeyPressTime = Date.now();
             }
 
             //JUMP
             if (this.world.keyboard.SPACE  && !this.isAboveGround()) {
                 this.jump();
+                this.lastKeyPressTime = Date.now();
                 // this.jumping_sound.play();
             };
 
@@ -90,21 +136,32 @@ class Character extends MovableObject {
         }, 1000 / 60);
     
 
+        
+
         setInterval(() => {
-            if(this.isDead()) {
+            if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
-            } else if(this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_JUMP);
-            } else {
-                if (this.world.keyboard.RIGHT ||  this.world.keyboard.LEFT) {
+            } else if (!this.isAboveGround() && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {
                 this.playAnimation(this.IMAGES_WALKING);
-                }
+            }
+        }, 50);
+    
+        setInterval(() => {
+            const timeSinceLastKeyPress = Date.now() - this.lastKeyPressTime;
+            if (timeSinceLastKeyPress > 10000) { // 4 seconds delay
+                this.playAnimation(this.IMAGES_IDLE_LONG);
+            } else if (timeSinceLastKeyPress > 1) { // 1 second delay
+                this.playAnimation(this.IMAGES_IDLE);
+            }
+        }, 400);
+
+        setInterval(() => {
+            if (this.isAboveGround() && !this.isDead() && !this.isHurt()) {
+                this.playAnimation(this.IMAGES_JUMP);
             }
             
-        }, 50);
+        }, 100);
     }
-
-    
 }
