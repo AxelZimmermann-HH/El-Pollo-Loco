@@ -20,6 +20,7 @@
     <script src="./classes/status-coins.class.js"></script>
     <script src="./classes/status-bottles.class.js"></script>
     <script src="./classes/status-enemy.class.js"></script>
+    <script src="./classes/screens.class.js"></script>
     <script src="./classes/world.class.js"></script>
     <script src="./classes/background-object.class.js"></script>
     <script src="./classes/keyboard.class.js"></script>
@@ -32,11 +33,21 @@
     
     
 </head>
+
+
 <body onload="init()">
 
-    <h1>El pollo Loco</h1>
+    <img src="./img/logo.png" alt="">
 
-    <canvas id="canvas" width="720px" height="480px" tabindex="1"></canvas>
+    <div class="menu">
+        <img src="./img/help.png" alt="">
+        <img onclick="init()" src="./img/play.png" alt="">
+    </div>
+
+    <canvas  id="canvas" width="720px" height="480px" tabindex="1"></canvas>
+
+        
     
+     
 </body>
 </html>

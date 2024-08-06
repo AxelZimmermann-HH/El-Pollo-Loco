@@ -13,8 +13,11 @@ class World {
     statusCoins;
     statusBottles;
     statusEnemy;
+    screen;
     invulnerability = false;
     throwCooldown = false;
+
+    
     
 
     constructor(canvas, keyboard) {
@@ -26,10 +29,21 @@ class World {
         this.statusCoins = new StatusCoins(this.statusBottles);
         this.statusHealth = new StatusHealth();
         this.statusEnemy = new StatusEnemy();
+        
+
+        this.level.endboss.forEach(enemy => {
+            if (enemy instanceof Endboss) {
+                enemy.world = this; // Setze die world-Instanz für den Endboss
+            }
+        });
 
         this.draw();
         this.setWorld();
         this.run();
+    }
+
+    getCharacterX() {
+        return this.character.x;
     }
 
     /**
@@ -146,6 +160,11 @@ class World {
         }, duration);
     };
 
+    showEndScreen() {
+            this.screen = new Screen('../img/9_intro_outro_screens/win/win_2.png'); // Screen-Objekt erstellen
+            this.screen.bounce(); // Bounce-Effekt starten
+    }
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -169,6 +188,10 @@ class World {
         this.addToMap(this.statusCoins);
         this.addToMap(this.statusBottles);
         this.addToMap(this.statusEnemy);
+        
+        if (this.screen) { // Nur zeichnen, wenn das Screen-Objekt vorhanden ist
+            this.addToMap(this.screen);
+        }
 
 
         //draw() wird immer wieder aufgerufen

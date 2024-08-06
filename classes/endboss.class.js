@@ -11,7 +11,14 @@ class Endboss extends MovableObject {
         heightAdjustment: 70
     };
 
+
     IMAGES_WALKING = [
+        '../img/4_enemie_boss_chicken/1_walk/G1.png',
+        '../img/4_enemie_boss_chicken/1_walk/G2.png',
+        '../img/4_enemie_boss_chicken/1_walk/G3.png',
+        '../img/4_enemie_boss_chicken/1_walk/G4.png'
+    ];
+    IMAGES_ALERT = [
         '../img/4_enemie_boss_chicken/2_alert/G5.png',
         '../img/4_enemie_boss_chicken/2_alert/G6.png',
         '../img/4_enemie_boss_chicken/2_alert/G7.png',
@@ -44,9 +51,10 @@ class Endboss extends MovableObject {
     speed = 0.15 + Math.random() * 1;
     isHurt = false;
     isDead = false;
+    animationStarted = false;
     
-    
-    
+    world;
+    alertSound = new Audio('../audio/alert2.wav');
 
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
@@ -54,67 +62,105 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_ATTACK);
+        this.loadImages(this.IMAGES_ALERT);
         this.animate();
     }
 
     animate() {
-        // Walking animation
-        this.walkingInterval = setInterval(() => {
-            if (!this.isHurt && !this.isDead) { // Nur abspielen, wenn der Boss nicht verletzt oder tot ist
-                this.playAnimation(this.IMAGES_WALKING);
+        this.checkCharacterPositionInterval = setInterval(() => {
+            if (this.world.getCharacterX() >= 700 && !this.animationStarted) {
+                this.animationStarted = true;
+                this.alertSound.play();
+                this.startAnimation();
             }
-        }, 80);
+        }, 100); // Überprüft alle 100ms die Charakterposition
+    }
 
-        // Attack animation every 7 seconds
-        this.attackInterval = setInterval(() => {
-            if (!this.isHurt && !this.isDead) { // Nur abspielen, wenn der Boss nicht verletzt oder tot ist
-                clearInterval(this.walkingInterval); // Stop the walking animation
-                let attackIndex = 0;
-                let attackAnimation = setInterval(() => {
-                    this.img = this.imageCache[this.IMAGES_ATTACK[attackIndex]];
-                    attackIndex++;
-                    if (attackIndex >= this.IMAGES_ATTACK.length) {
-                        attackIndex = 0; // Reset the attack animation index
-                    }
-                }, 200); // Set the frame duration for the attack animation
-                setTimeout(() => {
-                    clearInterval(attackAnimation);
-                    if (!this.isHurt && !this.isDead) { // Nur zurücksetzen, wenn der Boss nicht verletzt oder tot ist
-                        this.walkingInterval = setInterval(() => {
-                            this.playAnimation(this.IMAGES_WALKING);
-                        }, 200);
-                    }
-                }, 2000); // Animiert für 2 Sekunden
+    startAnimation() {
+        let alertInterval = setInterval(() => {
+            this.playAnimation(this.IMAGES_ALERT);
+            this.x -= 13
+        }, 100); // Setze die Frame-Dauer für die Alert-Animation
+
+        setTimeout(() => {
+            clearInterval(alertInterval);
+            this.startWalkingAnimation();
+        }, 3500); // 5 Sekunden Alert-Animation
+    }
+
+    startWalkingAnimation() {
+        let stepCycle = [0, -4, -8, -12, -16, -20, -16, -12, -8, -4];
+        let stepIndex = 0;
+
+        this.walkingInterval = setInterval(() => {
+            if (!this.isHurt && !this.isDead) {
+                this.playAnimation(this.IMAGES_WALKING);
+                this.x += stepCycle[stepIndex];
+                stepIndex = (stepIndex + 1) % stepCycle.length; // Schrittzyklus inkrementieren und zurücksetzen
             }
-        }, 7000);
+        }, 150);
     }
 
     hurt() {
-        this.isHurt = true; // Zustand ändern
-        clearInterval(this.walkingInterval);
-        clearInterval(this.attackInterval);
-        let hurtInterval = setInterval(() => {
+        this.isHurt = true;
+        this.clearTimeoutsIntervals();
+        
+        this.hurtInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_HURT);
         }, 100);
-        setTimeout(() => {
-            clearInterval(hurtInterval);
-            this.isHurt = false; // Zustand zurücksetzen
-            this.animate(); // Restart animation
-        }, 2000); // Animiert für 2 Sekunden
+
+        this.hurtTimeout = setTimeout(() => {
+            clearInterval(this.hurtInterval);
+            this.attack();
+        }, 2000);
+    }
+
+    clearTimeoutsIntervals() {
+        clearTimeout(this.hurtTimeout); // Reset the hurt timeout if it's already running
+        clearTimeout(this.attackTimeout); // Reset the attack timeout if it's already running
+        clearInterval(this.walkingInterval);
+        clearInterval(this.hurtInterval); // Reset hurt interval
+        clearInterval(this.attackInterval); // Reset attack interval
+    }
+
+    attack() {
+        this.playAttackAnimation();
+        this.setAttackTimout();
+         // Attack animation for 2 seconds
+    }
+
+    playAttackAnimation() {
+        let i = 0;
+        this.attackInterval = setInterval(() => {
+            this.img = this.imageCache[this.IMAGES_ATTACK[i]];
+            i++;
+            this.x -= 15;
+            if (i >= this.IMAGES_ATTACK.length) {
+                i = 0;
+            }
+        }, 80);
+    };
+
+    setAttackTimout() {
+        this.attackTimeout = setTimeout(() => {
+            clearInterval(this.attackInterval);
+            this.isHurt = false;
+            this.startWalkingAnimation(); // Restart walking animation
+        }, 3000);
     }
 
     dead() {
-        this.isDead = true; // Zustand ändern
-        clearInterval(this.walkingInterval);
-        clearInterval(this.attackInterval);
+        this.isDead = true;
+        this.clearTimeoutsIntervals();
+
         let deadInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_DEAD);
         }, 100);
+
         setTimeout(() => {
             clearInterval(deadInterval);
-            this.isDead = false; // Zustand zurücksetzen
-        }, 5000); // Animiert für 5 Sekunden
+            this.isDead = false;
+            this.world.showEndScreen();
+        }, 1000); // Dead animation for 5 seconds
     }
-
-    
 }

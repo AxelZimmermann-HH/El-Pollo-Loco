@@ -55,18 +55,19 @@ let bottles = [
 
 
 
-const level1 = new Level(
-    [
-        new Chicken(),
-        new Chicken(),
-        new Chicken(), 
-    ],
-    [
-        new Endboss()
-    ],
+let level1 = new Level(
+        [
+            new Chicken(),
+            new Chicken(),
+            new Chicken(), 
+        ],
+        [
+            new Endboss()
+        ],
 
-    clouds,
-    bgObjects,
-    coins,
-    bottles
-);
+        clouds,
+        bgObjects,
+        coins,
+        bottles
+    );
+
