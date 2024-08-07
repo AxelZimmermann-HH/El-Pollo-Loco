@@ -1,12 +1,13 @@
 class Screen extends DrawableObject {
-    x = 40;
-    y = 0;
-    width = 640;
     height = 480;
 
 
-    constructor(path) {
+    constructor(path, x, y, width) {
         super().loadImage(path);
+        this.x = x;
+        this.y = y;
+        this. width = width;
+
     }
 
     bounce() {

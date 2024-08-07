@@ -1,6 +1,5 @@
 let bgObjects = [];
 
-
 const numRepetitions = 10; // Anzahl der Wiederholungen
 for (let i = -2; i < numRepetitions; i++) {
     let xOffset = 1440 * i; // Abstand von 1440px pro Iteration
@@ -19,15 +18,7 @@ let clouds = [
     new Cloud('../img/5_background/layers/4_clouds/2.png', 620),
     new Cloud('../img/5_background/layers/4_clouds/1.png', 1340),
     new Cloud('../img/5_background/layers/4_clouds/2.png', 2060)
-
-    
 ];
-// let clouds = [];
-// for (let i = 0; i < numRepetitions; i++) {
-//     let xOffset = 720 * i; // Abstand von 720px pro Iteration
-//     clouds.push(new Cloud('../img/5_background/clouds/1.png', xOffset, 50));
-//     clouds.push(new Cloud('../img/5_background/clouds/2.png', xOffset + 720, 50));
-// }
 
 let coins = [
     new Coins('../img/8_coin/coin_2.png', 400, 180, 100, 100),
@@ -51,23 +42,17 @@ let bottles = [
     new Bottle('../img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 1300, 360, 80, 80)
 ];  
 
-
-
-
-
 let level1 = new Level(
-        [
-            new Chicken(),
-            new Chicken(),
-            new Chicken(), 
-        ],
-        [
-            new Endboss()
-        ],
-
-        clouds,
-        bgObjects,
-        coins,
-        bottles
-    );
-
+    [
+        new Chicken(),
+        new Chicken(),
+        new Chicken(), 
+    ],
+    [
+        new Endboss()
+    ],
+    clouds,
+    bgObjects,
+    coins,
+    bottles
+);

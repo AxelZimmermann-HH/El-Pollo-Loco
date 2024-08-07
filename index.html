@@ -6,7 +6,7 @@
     <title>El Pollo Loco</title>
     <link rel="icon" type="image/png" href="./img/favicon/favicon.png">
     <link rel="stylesheet" href="./style.css">
-    
+    <link rel="stylesheet" href="./layer-style.css">
     
     <script src="./classes/drawable-object.class.js"></script>
     <script src="./classes/movable-object.class.js"></script>
@@ -29,25 +29,24 @@
     <script src="./classes/endboss.class.js"></script>
     <script src="./levels/level1.js"></script> 
     <script src="./js/game.js"></script>
-    
-    
-    
 </head>
 
+<body onload="init(); checkStartParameter();">
+    <a href="./index.html">
+        <img class="logo" src="./img/logo.png" alt="">
+    </a>
 
-<body onload="init()">
-
-    <img src="./img/logo.png" alt="">
-
-    <div class="menu">
+    <div class="menu" id="menu">
         <img src="./img/help.png" alt="">
-        <img onclick="init()" src="./img/play.png" alt="">
+        <img onclick="loadLevel()" src="./img/play.png" alt="">
     </div>
 
-    <canvas  id="canvas" width="720px" height="480px" tabindex="1"></canvas>
+<div id="canvas-container">
 
-        
-    
-     
+    <canvas id="canvas" width="720px" height="480px" tabindex="1"></canvas>
+    <button id="button2" class="button d-none" onclick="resetGame()">PLAY AGAIN</button> 
+</div>
+
+
 </body>
 </html>

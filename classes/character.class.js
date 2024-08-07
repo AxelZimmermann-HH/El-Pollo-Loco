@@ -75,6 +75,7 @@ class Character extends MovableObject {
     jumping_sound = new Audio('../audio/arriba.mp3');
     
     lastKeyPressTime = 0;
+    firstDead = false;
     
     constructor() {
         super().loadImage(this.IMAGES_IDLE[0]);
@@ -107,7 +108,7 @@ class Character extends MovableObject {
     animate() {
         // Movement
         setInterval(() => {
-            
+            if (this.world.characterControlEnabled) {
             this.walking_sound.pause();
             
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -131,17 +132,25 @@ class Character extends MovableObject {
                 this.lastKeyPressTime = Date.now();
                 // this.jumping_sound.play();
             };
+        };
 
             this.world.camera_x = -this.x +50;
         }, 1000 / 60);
     
 
-        
 
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
-                this.world.showEndScreen();
+                
+                if (!this.firstDead) {
+                    this.world.showLoseScreen();
+                    setTimeout(() => {
+                        document.getElementById('button2').classList.remove('d-none');
+                    }, 1500)
+                    
+                    this.firstDead = true;
+                }
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (!this.isAboveGround() && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {

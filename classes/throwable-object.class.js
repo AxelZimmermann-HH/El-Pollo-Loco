@@ -62,6 +62,7 @@ throwLogic(){
             });
             if (this.y >= 386) {
                 this.y = 386;
+                this.bottleBreakSound.play();
                 this.splashAnimation(interval, this.IMAGES_SPLASH, 25);
             }
         } 

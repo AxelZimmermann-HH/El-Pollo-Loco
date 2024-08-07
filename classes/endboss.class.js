@@ -5,9 +5,9 @@ class Endboss extends MovableObject {
     height = 406;  
 
     collisionBox = {
-        offsetX: 10,
+        offsetX: 25,
         offsetY: 60,
-        widthAdjustment: 20,
+        widthAdjustment: 35,
         heightAdjustment: 70
     };
 
@@ -55,6 +55,7 @@ class Endboss extends MovableObject {
     
     world;
     alertSound = new Audio('../audio/alert2.wav');
+    bottleBreakSound = new Audio('../audio/bottle_break.mov');
 
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
@@ -63,17 +64,27 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_ALERT);
-        this.animate();
+        // this.animate();
     }
 
     animate() {
         this.checkCharacterPositionInterval = setInterval(() => {
-            if (this.world.getCharacterX() >= 700 && !this.animationStarted) {
+            if (this.world && this.world.getCharacterX && this.world.getCharacterX() >= 700 && !this.animationStarted) {
                 this.animationStarted = true;
-                this.alertSound.play();
+                this.playAlertSound();
                 this.startAnimation();
             }
         }, 100); // Überprüft alle 100ms die Charakterposition
+    }
+
+    playAlertSound() {
+        pauseBackgroundMusic(); // Hintergrundmusik pausieren
+        this.alertSound.play();
+
+        // Wiederaufnahme der Hintergrundmusik nach Ende des Sounds
+        this.alertSound.onended = () => {
+            restartBackgroundMusic();
+        };
     }
 
     startAnimation() {
@@ -104,7 +115,7 @@ class Endboss extends MovableObject {
     hurt() {
         this.isHurt = true;
         this.clearTimeoutsIntervals();
-        
+        this.bottleBreakSound.play();
         this.hurtInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_HURT);
         }, 100);
@@ -158,9 +169,12 @@ class Endboss extends MovableObject {
         }, 100);
 
         setTimeout(() => {
-            clearInterval(deadInterval);
+            // clearInterval(deadInterval);
             this.isDead = false;
-            this.world.showEndScreen();
+            this.world.showWinScreen();
+            setTimeout(() => {
+                document.getElementById('button2').classList.remove('d-none');
+            }, 1500);
         }, 1000); // Dead animation for 5 seconds
     }
 }

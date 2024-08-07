@@ -39,7 +39,6 @@ class DrawableObject {
             ctx.beginPath();
             ctx.lineWidth = '3';
             ctx.strokeStyle = "blue";
-    
             let offsetX = 0, offsetY = 0, widthAdjustment = 0, heightAdjustment = 0;
     
             if (this.collisionBox) {

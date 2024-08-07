@@ -5,6 +5,8 @@ class MovableObject extends DrawableObject {
     speedY = 0;
     acceleration = 2.5;
     lastHit = 0;
+
+    bottleBreakSound = new Audio('../audio/bottle_break.mov');
   
      gravityJump(){
         setInterval(() => {

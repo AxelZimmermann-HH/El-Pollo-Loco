@@ -3,6 +3,7 @@ class Chicken extends MovableObject {
     y = 365
     width = 80;  
     height = 79;  
+    animationStarted = false;
     IMAGES_WALKING = [
         '../img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
         '../img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
@@ -20,7 +21,14 @@ class Chicken extends MovableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.x = 500 + Math.random() * 500; //überschreibt die Koordinate aus movableObject
         this.speed = 0.15 + Math.random() * 0.5 ;
-        this.animate();
+        // this.animate();
+    }
+
+    startAnimation() {
+        if (!this.animationStarted) {
+            this.animationStarted = true;
+            this.animate();
+        }
     }
 
     animate() {
