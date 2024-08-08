@@ -1,14 +1,47 @@
 class MovableObject extends DrawableObject {
-    
     speed = 0.15;
     backwards = false;
     speedY = 0;
+    speedX = 0;
+    accelerationX = 0.2; // Beispielwert für die horizontale Beschleunigung
+    jumpInterval = null;
     acceleration = 2.5;
     lastHit = 0;
 
-    bottleBreakSound = new Audio('../audio/bottle_break.mov');
-  
-     gravityJump(){
+    gravityJump() {
+        if (this.jumpInterval) clearInterval(this.jumpInterval); // Stoppe vorheriges Intervall, falls vorhanden
+        this.jumpInterval = setInterval(() => {
+            
+            if (this.isAboveGround() || this.speedY > 0) {
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
+
+                // Bewege den Charakter nach hinten
+                this.x += this.speedX;
+                if (this.speedX < 0) {
+                    this.speedX += this.accelerationX; // Reduziere die Rückwärtsgeschwindigkeit
+                }
+
+                // Ensure y does not go below 206
+                if (this.y > 206) {
+                    this.y = 206;
+                    this.speedY = 0; // Reset speed when character reaches the ground
+                    clearInterval(this.jumpInterval); // Stoppe das Intervall
+                    
+                }
+            } else {
+                clearInterval(this.jumpInterval); // Stoppe das Intervall
+                
+            }
+        }, 1000 / 25);
+    }
+
+    
+    
+    
+
+
+    gravityJump2(){
         setInterval(() => {
             if(this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
@@ -22,6 +55,7 @@ class MovableObject extends DrawableObject {
               }
         }, 1000 / 25);
     };
+    
     
     isAboveGround() {
         if (this instanceof ThrowableObject) { //Throwable objects should always fall
@@ -66,7 +100,7 @@ class MovableObject extends DrawableObject {
     
     
     hit() {
-        this.energy -= 0.2 ;
+        this.energy -= 10 ;
         if(this.energy <= 0) {
             this.energy = 0;
         } else {
@@ -99,8 +133,30 @@ class MovableObject extends DrawableObject {
         this.x += this.speed;
     };
 
-    jump() {
-        this.speedY = 25;
+    jump(speedX, speedY) {
+        this.speedY = speedY; // Initialisieren der Sprunggeschwindigkeit
+        this.speedX = speedX; // Setze eine Rückwärtsgeschwindigkeit
+
+        // Führe die ersten Berechnungen sofort durch, um Verzögerung zu minimieren
+        if (this.isAboveGround() || this.speedY > 0) {
+            this.y -= this.speedY;
+            this.speedY -= this.acceleration;
+
+            // Bewege den Charakter nach hinten
+            this.x += this.speedX;
+            if (this.speedX < 0) {
+                this.speedX += this.accelerationX; // Reduziere die Rückwärtsgeschwindigkeit
+            }
+
+            // Ensure y does not go below 206
+            if (this.y > 206) {
+                this.y = 206;
+                this.speedY = 0; // Reset speed when character reaches the ground
+            }
+        }
+
+        // Starte das Intervall für weitere Berechnungen
+        this.gravityJump();
     }
 
     playEndAnimationOnce(array, speed) {

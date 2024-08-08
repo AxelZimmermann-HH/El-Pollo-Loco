@@ -1,23 +1,23 @@
-class Chicken extends MovableObject {
+class SmallChicken extends MovableObject {
     
-    y = 365
-    width = 80;  
-    height = 79;  
+    y = 405
+    width = 40;  
+    height = 40;  
     animationStarted = false;
     IMAGES_WALKING = [
-        '../img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
-        '../img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
-        '../img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
+        '../img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
+        '../img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
+        '../img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
     ];
 
-    IMAGE_DEAD = '../img/3_enemies_chicken/chicken_normal/2_dead/dead.png';
+    IMAGE_DEAD = '../img/3_enemies_chicken/chicken_small/2_dead/dead.png';
     
     
     
     
 
     constructor() {
-        super().loadImage('../img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
+        super().loadImage('../img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
         this.x = 500 + Math.random() * 2500; //überschreibt die Koordinate aus movableObject
         this.speed = 0.15 + Math.random() * 0.8 ;
@@ -46,7 +46,7 @@ class Chicken extends MovableObject {
         clearInterval(this.moveInterval);
         clearInterval(this.animationInterval);
          
-        let chickenSound = new Audio('../audio/chick2.mov');
+        let chickenSound = new Audio('../audio/bird.mov');
         chickenSound.play();
         this.loadImage(this.IMAGE_DEAD);
         setTimeout(() => {

@@ -1,5 +1,5 @@
 class Endboss extends MovableObject {
-    x = 1500; //überschreibt die Koordinate aus movableObject
+    x = 4000; //überschreibt die Koordinate aus movableObject
     y = 68;
     width = 348;  
     height = 406;  
@@ -55,7 +55,7 @@ class Endboss extends MovableObject {
     
     world;
     alertSound = new Audio('../audio/alert2.wav');
-    bottleBreakSound = new Audio('../audio/bottle_break.mov');
+    
 
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
@@ -69,7 +69,7 @@ class Endboss extends MovableObject {
 
     animate() {
         this.checkCharacterPositionInterval = setInterval(() => {
-            if (this.world && this.world.getCharacterX && this.world.getCharacterX() >= 700 && !this.animationStarted) {
+            if (this.world && this.world.getCharacterX && this.world.getCharacterX() >= 3200 && !this.animationStarted) {
                 this.animationStarted = true;
                 this.playAlertSound();
                 this.startAnimation();
@@ -89,6 +89,7 @@ class Endboss extends MovableObject {
 
     startAnimation() {
         let alertInterval = setInterval(() => {
+            this.world.characterControlEnabled = false;
             this.playAnimation(this.IMAGES_ALERT);
             this.x -= 13
         }, 100); // Setze die Frame-Dauer für die Alert-Animation
@@ -105,6 +106,7 @@ class Endboss extends MovableObject {
 
         this.walkingInterval = setInterval(() => {
             if (!this.isHurt && !this.isDead) {
+                this.world.characterControlEnabled = true;
                 this.playAnimation(this.IMAGES_WALKING);
                 this.x += stepCycle[stepIndex];
                 stepIndex = (stepIndex + 1) % stepCycle.length; // Schrittzyklus inkrementieren und zurücksetzen
@@ -115,7 +117,8 @@ class Endboss extends MovableObject {
     hurt() {
         this.isHurt = true;
         this.clearTimeoutsIntervals();
-        this.bottleBreakSound.play();
+        let bottleBreakSound = new Audio('../audio/bottle_break.mov');
+        bottleBreakSound.play();
         this.hurtInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_HURT);
         }, 100);

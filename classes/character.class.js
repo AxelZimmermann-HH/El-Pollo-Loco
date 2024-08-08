@@ -128,7 +128,7 @@ class Character extends MovableObject {
 
             //JUMP
             if (this.world.keyboard.SPACE  && !this.isAboveGround()) {
-                this.jump();
+                this.jump(0, 25);
                 this.lastKeyPressTime = Date.now();
                 // this.jumping_sound.play();
             };

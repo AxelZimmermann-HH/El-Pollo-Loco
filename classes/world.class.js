@@ -17,7 +17,7 @@ class World {
     invulnerability = false;
     throwCooldown = false;
     characterControlEnabled = true;
-    chickenSound = new Audio('../audio/chicken.mov');
+    
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -63,7 +63,7 @@ class World {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
                 this.addEnemyToDefeat(enemiesToDefeat, enemy);
-                this.chickenSound.play();
+                
             }
         });
     
@@ -99,8 +99,9 @@ class World {
 
     characterHurt() {
         this.character.hit();
+        this.character.jump(-20, 5);
         this.statusHealth.setPercentage(this.character.energy);
-    }
+    } 
 
     handleDefeatedEnemies(enemiesToDefeat) {
         if (enemiesToDefeat.length > 0) {
@@ -112,6 +113,8 @@ class World {
     collectCoins() {
         this.level.coins.forEach((coin) => {
             if (this.character.isColliding(coin)) {
+                let coinSound = new Audio('../audio/coin.mov');
+                coinSound.play();
                 coin.y = -1000;
                 this.statusCoins.currentCoins++;
                 this.statusCoins.updateCoinBar();
@@ -122,6 +125,8 @@ class World {
     collectBottles() {
         this.level.bottles.forEach((bottle) => {
             if (this.character.isColliding(bottle)) {
+                let drinkSound = new Audio('../audio/slurp.mp3');
+                drinkSound.play();
                 bottle.y = -1000;
                 if (this.statusBottles.currentBottles < 5) {
                     this.statusBottles.currentBottles++;
