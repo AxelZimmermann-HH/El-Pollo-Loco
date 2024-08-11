@@ -100,6 +100,9 @@ class World {
     characterHurt() {
         this.character.hit();
         this.character.jump(-20, 5);
+        let hurtSound = new Audio('audio/hurt.mp3');
+        hurtSound.volume = globalVolume * 1.5; 
+        hurtSound.play();
         this.statusHealth.setPercentage(this.character.energy);
     } 
 
@@ -113,7 +116,8 @@ class World {
     collectCoins() {
         this.level.coins.forEach((coin) => {
             if (this.character.isColliding(coin)) {
-                let coinSound = new Audio('../audio/coin.mov');
+                let coinSound = new Audio('audio/coin.mov');
+                coinSound.volume = globalVolume * 2; 
                 coinSound.play();
                 coin.y = -1000;
                 this.statusCoins.currentCoins++;
@@ -125,7 +129,8 @@ class World {
     collectBottles() {
         this.level.bottles.forEach((bottle) => {
             if (this.character.isColliding(bottle)) {
-                let drinkSound = new Audio('../audio/slurp.mp3');
+                let drinkSound = new Audio('audio/slurp.mp3');
+                drinkSound.volume = globalVolume;
                 drinkSound.play();
                 bottle.y = -1000;
                 if (this.statusBottles.currentBottles < 5) {
@@ -156,13 +161,13 @@ class World {
 
     showWinScreen() {
         this.characterControlEnabled = false; // Steuerung des Charakters deaktivieren
-        this.screen = new Screen('../img/9_intro_outro_screens/win/win_2.png', 40, 0, 640); // Screen-Objekt erstellen
+        this.screen = new Screen('img/9_intro_outro_screens/win/win_2.png', 40, 0, 640); // Screen-Objekt erstellen
         this.screen.bounce(); // Bounce-Effekt starten
     }
 
     showLoseScreen() {
         this.characterControlEnabled = false;
-        this.screen = new Screen('../img/9_intro_outro_screens/game_over/game over!.png', 0, 0, 720); // Screen-Objekt erstellen
+        this.screen = new Screen('img/9_intro_outro_screens/game_over/game over!.png', 0, 0, 720); // Screen-Objekt erstellen
     }
 
     draw() {

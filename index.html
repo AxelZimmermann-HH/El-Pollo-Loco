@@ -29,7 +29,7 @@
     <script src="./classes/throwable-object.class.js"></script>
     <script src="./classes/endboss.class.js"></script>
     <script src="./levels/level1.js"></script> 
-    <script src="./js/game.js"></script>
+    <script src="./js/game.js" defer></script>
 </head>
 
 <body onload="init(); checkStartParameter();">
@@ -38,15 +38,66 @@
     </a>
 
     <div class="menu" id="menu">
-        <img src="./img/help.png" alt="">
+        <img onclick="showInfoLayer()"src="./img/help.png" alt="">
         <img onclick="loadLevel()" src="./img/play.png" alt="">
     </div>
 
 <div id="canvas-container">
-
-    <canvas id="canvas" width="720px" height="480px" tabindex="1"></canvas>
-    <button id="button2" class="button d-none" onclick="resetGame()">PLAY AGAIN</button> 
+    <div id="canvas-responsive">
+        <div class="res-menu">
+            <div class="res-menu-group">
+                <img id="btn-left" src="img/left.png" alt="">
+                <img id="btn-right" src="img/right.png" alt="">
+            </div>  
+            <div class="res-menu-group">
+                <img id="btn-jump" src="img/jump.png" alt="">
+                <img id="btn-throw" src="img/throw.png" alt="">
+            </div> 
+        </div>
+        <canvas id="canvas" width="720px" height="480px" tabindex="1"></canvas>
+        <button id="button2" class="button d-none" onclick="resetGame()">PLAY AGAIN</button> 
+    </div>
+    
+    <a href="./index.html?start=true">
+        <img class="restart" src="./img/restart.png" alt="">
+    </a>
+    <a onclick="toggleSound()" href="#">
+        <img onclick="" class="restart  sound-off" id="sound" src="./img/sound-on.png" alt="">
+    </a>
+    <a onclick="toggleFullScreen()" href="#">
+        <img onclick="" class="full-screen" id="full-screen" src="./img/full.png" alt="">
+    </a>
 </div>
+
+
+<div id="info-layer" class="d-none">
+    <div id="info-inner-layer">
+        <div onclick="closeInfoLayer()" class="close">
+            <img src="./img/close.svg" alt="">
+        </div>
+        <table>
+            <tr>
+                <td><p>">"</p></td>
+                <td><p class="right">RIGHT</p></td>
+            </tr>
+            <tr>
+                <td><p>"&lt;"</p></td>
+                <td><p class="right">LEFT</p></td>
+            </tr>
+            <tr>
+                <td><p>"SPACE"</p></td>
+                <td><p class="right">JUMP</p></td>
+            </tr>
+            <tr>
+                <td><p>"D"</p></td>
+                <td><p class="right">THROW</p></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+
 
 
 </body>

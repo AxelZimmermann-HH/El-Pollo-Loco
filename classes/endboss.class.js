@@ -13,40 +13,40 @@ class Endboss extends MovableObject {
 
 
     IMAGES_WALKING = [
-        '../img/4_enemie_boss_chicken/1_walk/G1.png',
-        '../img/4_enemie_boss_chicken/1_walk/G2.png',
-        '../img/4_enemie_boss_chicken/1_walk/G3.png',
-        '../img/4_enemie_boss_chicken/1_walk/G4.png'
+        'img/4_enemie_boss_chicken/1_walk/G1.png',
+        'img/4_enemie_boss_chicken/1_walk/G2.png',
+        'img/4_enemie_boss_chicken/1_walk/G3.png',
+        'img/4_enemie_boss_chicken/1_walk/G4.png'
     ];
     IMAGES_ALERT = [
-        '../img/4_enemie_boss_chicken/2_alert/G5.png',
-        '../img/4_enemie_boss_chicken/2_alert/G6.png',
-        '../img/4_enemie_boss_chicken/2_alert/G7.png',
-        '../img/4_enemie_boss_chicken/2_alert/G8.png',
-        '../img/4_enemie_boss_chicken/2_alert/G9.png',
-        '../img/4_enemie_boss_chicken/2_alert/G10.png',
-        '../img/4_enemie_boss_chicken/2_alert/G11.png',
-        '../img/4_enemie_boss_chicken/2_alert/G12.png'
+        'img/4_enemie_boss_chicken/2_alert/G5.png',
+        'img/4_enemie_boss_chicken/2_alert/G6.png',
+        'img/4_enemie_boss_chicken/2_alert/G7.png',
+        'img/4_enemie_boss_chicken/2_alert/G8.png',
+        'img/4_enemie_boss_chicken/2_alert/G9.png',
+        'img/4_enemie_boss_chicken/2_alert/G10.png',
+        'img/4_enemie_boss_chicken/2_alert/G11.png',
+        'img/4_enemie_boss_chicken/2_alert/G12.png'
     ];
     IMAGES_HURT = [
-        '../img/4_enemie_boss_chicken/4_hurt/G21.png',
-        '../img/4_enemie_boss_chicken/4_hurt/G22.png',
-        '../img/4_enemie_boss_chicken/4_hurt/G23.png'
+        'img/4_enemie_boss_chicken/4_hurt/G21.png',
+        'img/4_enemie_boss_chicken/4_hurt/G22.png',
+        'img/4_enemie_boss_chicken/4_hurt/G23.png'
     ];
     IMAGES_DEAD = [
-        '../img/4_enemie_boss_chicken/5_dead/G24.png',
-        '../img/4_enemie_boss_chicken/5_dead/G25.png',
-        '../img/4_enemie_boss_chicken/5_dead/G26.png'
+        'img/4_enemie_boss_chicken/5_dead/G24.png',
+        'img/4_enemie_boss_chicken/5_dead/G25.png',
+        'img/4_enemie_boss_chicken/5_dead/G26.png'
     ];
     IMAGES_ATTACK = [
-        '../img/4_enemie_boss_chicken/3_attack/G13.png',
-        '../img/4_enemie_boss_chicken/3_attack/G14.png',
-        '../img/4_enemie_boss_chicken/3_attack/G15.png',
-        '../img/4_enemie_boss_chicken/3_attack/G16.png',
-        '../img/4_enemie_boss_chicken/3_attack/G17.png',
-        '../img/4_enemie_boss_chicken/3_attack/G18.png',
-        '../img/4_enemie_boss_chicken/3_attack/G19.png',
-        '../img/4_enemie_boss_chicken/3_attack/G20.png'
+        'img/4_enemie_boss_chicken/3_attack/G13.png',
+        'img/4_enemie_boss_chicken/3_attack/G14.png',
+        'img/4_enemie_boss_chicken/3_attack/G15.png',
+        'img/4_enemie_boss_chicken/3_attack/G16.png',
+        'img/4_enemie_boss_chicken/3_attack/G17.png',
+        'img/4_enemie_boss_chicken/3_attack/G18.png',
+        'img/4_enemie_boss_chicken/3_attack/G19.png',
+        'img/4_enemie_boss_chicken/3_attack/G20.png'
     ]
     speed = 0.15 + Math.random() * 1;
     isHurt = false;
@@ -54,7 +54,7 @@ class Endboss extends MovableObject {
     animationStarted = false;
     
     world;
-    alertSound = new Audio('../audio/alert2.wav');
+    alertSound = new Audio('audio/alert2.wav');
     
 
     constructor() {
@@ -79,6 +79,7 @@ class Endboss extends MovableObject {
 
     playAlertSound() {
         pauseBackgroundMusic(); // Hintergrundmusik pausieren
+        this.alertSound.volume = globalVolume * 2; 
         this.alertSound.play();
 
         // Wiederaufnahme der Hintergrundmusik nach Ende des Sounds
@@ -117,8 +118,10 @@ class Endboss extends MovableObject {
     hurt() {
         this.isHurt = true;
         this.clearTimeoutsIntervals();
-        let bottleBreakSound = new Audio('../audio/bottle_break.mov');
+        let bottleBreakSound = new Audio('audio/bottle_break.mov');
+        bottleBreakSound.volume = globalVolume;
         bottleBreakSound.play();
+        
         this.hurtInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_HURT);
         }, 100);
@@ -171,10 +174,25 @@ class Endboss extends MovableObject {
             this.playAnimation(this.IMAGES_DEAD);
         }, 100);
 
+        if (backgroundMusic) {
+            backgroundMusic.pause();  // Musik pausieren
+            backgroundMusic.currentTime = 0;  // Musik zurücksetzen, optional
+        }
+    
+        // Sieges-Sound abspielen
+        let winSound = new Audio('audio/win.mov');
+        winSound.volume = globalVolume * 0.5;
+        winSound.play();
+        
+
+
         setTimeout(() => {
             // clearInterval(deadInterval);
             this.isDead = false;
             this.world.showWinScreen();
+
+            
+
             setTimeout(() => {
                 document.getElementById('button2').classList.remove('d-none');
             }, 1500);

@@ -15,13 +15,17 @@ class MovableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
-
+    
                 // Bewege den Charakter nach hinten
                 this.x += this.speedX;
                 if (this.speedX < 0) {
                     this.speedX += this.accelerationX; // Reduziere die Rückwärtsgeschwindigkeit
                 }
-
+    
+                // Runde die Positionen auf ganze Zahlen
+                this.x = Math.round(this.x);
+                this.y = Math.round(this.y);
+    
                 // Ensure y does not go below 206
                 if (this.y > 206) {
                     this.y = 206;
@@ -35,7 +39,6 @@ class MovableObject extends DrawableObject {
             }
         }, 1000 / 25);
     }
-
     
     
     
@@ -136,25 +139,29 @@ class MovableObject extends DrawableObject {
     jump(speedX, speedY) {
         this.speedY = speedY; // Initialisieren der Sprunggeschwindigkeit
         this.speedX = speedX; // Setze eine Rückwärtsgeschwindigkeit
-
+    
         // Führe die ersten Berechnungen sofort durch, um Verzögerung zu minimieren
         if (this.isAboveGround() || this.speedY > 0) {
             this.y -= this.speedY;
             this.speedY -= this.acceleration;
-
+    
             // Bewege den Charakter nach hinten
             this.x += this.speedX;
             if (this.speedX < 0) {
                 this.speedX += this.accelerationX; // Reduziere die Rückwärtsgeschwindigkeit
             }
-
+    
+            // Runde die Positionen auf ganze Zahlen
+            this.x = Math.round(this.x);
+            this.y = Math.round(this.y);
+    
             // Ensure y does not go below 206
             if (this.y > 206) {
                 this.y = 206;
                 this.speedY = 0; // Reset speed when character reaches the ground
             }
         }
-
+    
         // Starte das Intervall für weitere Berechnungen
         this.gravityJump();
     }
