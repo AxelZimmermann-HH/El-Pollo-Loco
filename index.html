@@ -33,72 +33,83 @@
 </head>
 
 <body onload="init(); checkStartParameter();">
+
     <a href="./index.html">
         <img class="logo" src="./img/logo.png" alt="">
     </a>
 
     <div class="menu" id="menu">
         <img onclick="showInfoLayer()"src="./img/help.png" alt="">
-        <img onclick="loadLevel()" src="./img/play.png" alt="">
+        <img id="load-level" onclick="loadLevel()" src="./img/play.png" alt="">
     </div>
 
-<div id="canvas-container">
-    <div id="canvas-responsive">
-        <div class="res-menu">
-            <div class="res-menu-group">
-                <img id="btn-left" src="img/left.png" alt="">
-                <img id="btn-right" src="img/right.png" alt="">
-            </div>  
-            <div class="res-menu-group">
-                <img id="btn-jump" src="img/jump.png" alt="">
-                <img id="btn-throw" src="img/throw.png" alt="">
-            </div> 
+    <div id="canvas-container">
+        <a href="index.html?start=true">
+            <img class="restart" src="./img/restart.png" alt="">
+        </a>
+        <a onclick="toggleSound()" href="#">
+            <img onclick="" class="restart  sound-off" id="sound" src="img/sound-on.png" alt="">
+        </a>
+        <a onclick="toggleFullScreen(event)" href="#">
+            <img class="full-screen" id="full-screen" src="img/full.png" alt="">
+        </a>
+        
+        <div id="canvas-responsive">
+            <div class="res-menu">
+                <div class="res-menu-group">
+                    <img id="btn-left" src="img/left.png" alt="">
+                    <img id="btn-right" src="img/right.png" alt="">
+                </div>  
+                <div class="res-menu-group">
+                    <img id="btn-fullscreen" src="img/full.png" alt="">
+                    <img id="btn-sound" class="sound-img" src="img/sound-on.png" alt="">
+                </div> 
+                <div class="res-menu-group">
+                    <img id="btn-jump" src="img/jump.png" alt="">
+                    <img id="btn-throw" src="img/throw.png" alt="">
+                </div> 
+            </div>
+            <canvas id="canvas" width="720px" height="480px" tabindex="1"></canvas>
+            <button id="button2" class="button d-none" onclick="resetGame()">PLAY AGAIN</button> 
         </div>
-        <canvas id="canvas" width="720px" height="480px" tabindex="1"></canvas>
-        <button id="button2" class="button d-none" onclick="resetGame()">PLAY AGAIN</button> 
     </div>
-    
-    <a href="./index.html?start=true">
-        <img class="restart" src="./img/restart.png" alt="">
-    </a>
-    <a onclick="toggleSound()" href="#">
-        <img onclick="" class="restart  sound-off" id="sound" src="./img/sound-on.png" alt="">
-    </a>
-    <a onclick="toggleFullScreen()" href="#">
-        <img onclick="" class="full-screen" id="full-screen" src="./img/full.png" alt="">
-    </a>
-</div>
 
+    <!-- INFO-LAYER -->
 
-<div id="info-layer" class="d-none">
-    <div id="info-inner-layer">
-        <div onclick="closeInfoLayer()" class="close">
-            <img src="./img/close.svg" alt="">
+    <div id="info-layer" class="d-none">
+        <div id="info-inner-layer">
+            <div onclick="closeInfoLayer()" class="close">
+                <img src="./img/close.svg" alt="">
+            </div>
+            <table>
+                <tr>
+                    <td><p>">"</p></td>
+                    <td><p class="right">RIGHT</p></td>
+                </tr>
+                <tr>
+                    <td><p>"&lt;"</p></td>
+                    <td><p class="right">LEFT</p></td>
+                </tr>
+                <tr>
+                    <td><p>"SPACE"</p></td>
+                    <td><p class="right">JUMP</p></td>
+                </tr>
+                <tr>
+                    <td><p>"D"</p></td>
+                    <td><p class="right">THROW</p></td>
+                </tr>
+            </table>
         </div>
-        <table>
-            <tr>
-                <td><p>">"</p></td>
-                <td><p class="right">RIGHT</p></td>
-            </tr>
-            <tr>
-                <td><p>"&lt;"</p></td>
-                <td><p class="right">LEFT</p></td>
-            </tr>
-            <tr>
-                <td><p>"SPACE"</p></td>
-                <td><p class="right">JUMP</p></td>
-            </tr>
-            <tr>
-                <td><p>"D"</p></td>
-                <td><p class="right">THROW</p></td>
-            </tr>
-        </table>
     </div>
-</div>
 
+    <!-- TURN-SCREEN-LAYER -->
 
-
-
+    <div id="screen-layer">
+        <div class="screen-inner-layer">
+            <img src="img/rotate.svg" alt="">
+            <h1>TURN SCREEN</h1>
+        </div>
+    </div>
 
 </body>
 </html>

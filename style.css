@@ -66,7 +66,8 @@ body img {
 }
 
 .logo {
-    transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);               
+    transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);       
+    margin-bottom: 100px;        
 }
 
 .logo:hover {
@@ -93,10 +94,10 @@ body img {
 
 .sound-off {
     left: 80%;;
-    width: 70px;
+    width: 77px;
 }
 .sound-off:hover {
-    width: 127px;
+    width: 85px;
 }
 
 .full-screen {
@@ -105,6 +106,9 @@ body img {
     left: 70%;
     transform: translate(-50%, -50%);
     position: absolute;
+}
+.full-screen:hover {
+    width: 50px;
 }
 .menu img:hover {
     cursor: pointer;
@@ -206,7 +210,7 @@ table p {
     width: 720px;
     height: 480px;
     display: none;
-    margin-bottom: 100px;
+    /* margin-bottom: 100px; */
 }
 
 
@@ -222,7 +226,7 @@ table p {
 .res-menu {
     width: 100%;
     position: absolute;
-    bottom: 20px;
+    bottom: 5px;
     display: flex;
     justify-content: space-around;
     display: none;
@@ -230,6 +234,11 @@ table p {
 
 .res-menu img {
     width: 40px;
+}
+
+.sound-img {
+    width: 60px!important;
+   
 }
 
 canvas {
@@ -287,11 +296,70 @@ canvas {
    left: 10;
 }
 
-/* Skaliere das Canvas, wenn die Breite des Bildschirms kleiner als 720px ist */
-@media only screen and (max-width: 720px) {
+
+#screen-layer {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen-inner-layer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.screen-inner-layer img {
+    width: 80px;
+    animation: rotateImage 3s infinite;
+    transform-origin: center;
+}
+
+@keyframes rotateImage {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(90deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+
+@media (max-width: 900px) {
     body img {
         width: 200px;
     }
+    .res-menu {
+        display: flex; /* Oder block, je nach Layout */
+    }
+    .menu {
+        display: flex;
+        width: 300px;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0;
+    }
+    
+    .menu img {
+        width: 100px;
+        height: 100px;  
+        transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                    filter 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);    
+    }
+}
+/* Skaliere das Canvas, wenn die Breite des Bildschirms kleiner als 720px ist */
+@media only screen and (max-width: 720px) {
     canvas, #canvas-container {
         width: 100% !important; /* Das Canvas passt sich der Breite des Bildschirms an */
         height: auto !important; /* Höhe wird automatisch skaliert, um das Seitenverhältnis zu erhalten */
@@ -316,10 +384,8 @@ canvas {
         width: 65px;
     }
 
-    .full-screen {
-        top: -12%;
-        width: 37px;
-        left: 68%;
+    #full-screen, #sound {
+        display: none;
     }
     .full-screen:hover {
         width: 41px;
@@ -327,24 +393,9 @@ canvas {
     .button {
         font-size: 15px;
     }
-    .menu {
-        display: flex;
-        width: 300px;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 100px;
-    }
     
-    .menu img {
-        width: 100px;
-        height: 100px;  
-        transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), 
-                    filter 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);    
-    }
 
-    .res-menu {
-        display: flex; /* Oder block, je nach Layout */
-    }
+    
 }
 
 /* Skaliere das Canvas auf die volle Höhe, wenn die Bildschirmhöhe kleiner als 480px ist */
@@ -354,6 +405,42 @@ canvas {
         width: auto !important; /* Breite wird automatisch skaliert, um das Seitenverhältnis zu erhalten */
     }
 
+}
+
+@media (max-width: 600px) {
+    #info-inner-layer {
+        width: 85%;
+        height: 500px;
+    }
+    .close {
+        width: 100%;
+    }
+    #screen-layer {
+        display: flex;
+    }
+}
+
+@media (max-height: 480px) {
+    #info-inner-layer {
+        width: 85%;
+        height: 80%;
+    }
+    .close {
+        width: 100%;
+    }
+    table p {     
+        font-size: 30px;    
+    }
+    table td {
+        width: 230px;
+        height: 60px;
+    }
+}
+
+@media (max-width: 550px) {
+    table p {     
+        font-size: 30px;    
+    }
 }
 
 
