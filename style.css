@@ -263,9 +263,12 @@ canvas {
     border-radius: 20px;
     box-shadow: 0px 0px 26px 5px #000000;
     width: 100%;
-    height: auto; 
+    height: auto;
     z-index: 1;
     position: relative;
+    max-width: 100%; /* Begrenzt die Breite des Canvas */
+    max-height: 100%; /* Begrenzt die Höhe des Canvas */
+    object-fit: contain; /* Verhindert das Abschneiden des Canvas-Inhalts */
 }
 
 #canvas-responsive h1 {
