@@ -53,7 +53,8 @@ const touchHandlers = {
     'btn-sound': toggleSound,
     'btn-fullscreen': (e) => toggleFullScreen(e),
     'button2': resetGameMobile,
-    'load-level': loadLevel
+    'load-level': loadLevel,
+    'btn-back': () => { window.location.href = 'index.html'; }
 };
 
 /**
@@ -80,6 +81,7 @@ function loadLevel() {
 
     if (/Mobi|Android/i.test(navigator.userAgent)) {
         document.getElementById('canvas').scrollIntoView({ behavior: 'smooth' });}
+        // document.body.style.overflow = 'hidden';
 };
 
 /**
@@ -119,12 +121,81 @@ function resetGameMobile() {
 };
 
 /**
- * Displays the info layer with description of the keys needed.
+ * Displays the info layer or the legal notice layer with description of the keys needed.
  */
-function showInfoLayer() {
+function showInfoLayer(img) {
     let infoLayer = document.getElementById('info-layer'); 
     infoLayer.classList.remove('d-none');
+    infoLayer.innerHTML = '';
+
+    if (img.src.includes('impr')) {
+        infoLayer.innerHTML += getImprHTML();
+    } else {
+        infoLayer.innerHTML += getInfoHTML();
+    };
 };
+
+/**
+ * @returns the HTML code for info layer
+ */
+function getInfoHTML() {
+    return `
+        &lt;div id="info-inner-layer">
+            &lt;div onclick="closeInfoLayer()" class="close">
+                &lt;img src="./img/close.svg" alt="">
+            &lt;/div>
+            &lt;table>
+                &lt;tr>
+                    &lt;td>&lt;p>">"&lt;/p>&lt;/td>
+                    &lt;td>&lt;p class="right">RIGHT&lt;/p>&lt;/td>
+                &lt;/tr>
+                &lt;tr>
+                    &lt;td>&lt;p>"&amp;lt;"&lt;/p>&lt;/td>
+                    &lt;td>&lt;p class="right">LEFT&lt;/p>&lt;/td>
+                &lt;/tr>
+                &lt;tr>
+                    &lt;td>&lt;p>"SPACE"&lt;/p>&lt;/td>
+                    &lt;td>&lt;p class="right">JUMP&lt;/p>&lt;/td>
+                &lt;/tr>
+                &lt;tr>
+                    &lt;td>&lt;p>"D"&lt;/p>&lt;/td>
+                    &lt;td>&lt;p class="right">THROW&lt;/p>&lt;/td>
+                &lt;/tr>
+            &lt;/table>
+        &lt;/div>
+    `;
+};
+
+/**
+ * @returns the HTML code for legal notice
+ */
+function getImprHTML() {
+    return `
+    &lt;div id="info-inner-layer">
+            &lt;div class="impressum-out">
+                &lt;div onclick="closeInfoLayer()" class="close">
+                    &lt;img src="./img/close.svg" alt="">
+                &lt;/div>
+                &lt;div class="impressum">
+                    &lt;h1>Impressum&lt;/h1>
+                    &lt;p>Axel Zimmermann&lt;/p>
+                    &lt;p>Fuhlsbüttler Straße 415C&lt;/p>
+                    &lt;p>22309 Hamburg&lt;/p>
+                    
+
+                    &lt;h3>Kontakt&lt;/h3>
+                    &lt;p>Telefon: +49 (40) 51 444 101&lt;/p>
+                    &lt;p>E-Mail: a.zimmermann@cash-online.de&lt;/p>
+
+                    &lt;h3>Redaktionell verantwortlich&lt;/h3>
+                    &lt;p>Axel Zimmermann&lt;/p>
+                    &lt;p>Fuhlsbüttler Straße 415C&lt;/p>
+                    &lt;p>22309 Hamburg&lt;/p>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    `
+}
 
 /**
  * Hides the info layer with description of the keys needed.
@@ -263,13 +334,13 @@ function handleKey(e, isPressed) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkStartParameter">checkStartParameter</a></li><li><a href="global.html#closeInfoLayer">closeInfoLayer</a></li><li><a href="global.html#handleKey">handleKey</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#loadLevel">loadLevel</a></li><li><a href="global.html#mobileTouchend">mobileTouchend</a></li><li><a href="global.html#mobileTouchstart">mobileTouchstart</a></li><li><a href="global.html#pauseBackgroundMusic">pauseBackgroundMusic</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#resetGameMobile">resetGameMobile</a></li><li><a href="global.html#restartBackgroundMusic">restartBackgroundMusic</a></li><li><a href="global.html#showInfoLayer">showInfoLayer</a></li><li><a href="global.html#toggleFullScreen">toggleFullScreen</a></li><li><a href="global.html#toggleSound">toggleSound</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkStartParameter">checkStartParameter</a></li><li><a href="global.html#closeInfoLayer">closeInfoLayer</a></li><li><a href="global.html#getImprHTML">getImprHTML</a></li><li><a href="global.html#getInfoHTML">getInfoHTML</a></li><li><a href="global.html#handleKey">handleKey</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#loadLevel">loadLevel</a></li><li><a href="global.html#mobileTouchend">mobileTouchend</a></li><li><a href="global.html#mobileTouchstart">mobileTouchstart</a></li><li><a href="global.html#pauseBackgroundMusic">pauseBackgroundMusic</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#resetGameMobile">resetGameMobile</a></li><li><a href="global.html#restartBackgroundMusic">restartBackgroundMusic</a></li><li><a href="global.html#showInfoLayer">showInfoLayer</a></li><li><a href="global.html#toggleFullScreen">toggleFullScreen</a></li><li><a href="global.html#toggleSound">toggleSound</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Mon Aug 12 2024 20:12:28 GMT+0200 (Mitteleuropäische Sommerzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Aug 14 2024 10:08:54 GMT+0200 (Mitteleuropäische Sommerzeit)
 </footer>
 
 <script> prettyPrint(); </script>

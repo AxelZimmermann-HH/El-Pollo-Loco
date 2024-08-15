@@ -1,3 +1,2 @@
-class Bottle extends Collectable {
-    
-}
+class Bottle extends Collectable {  
+};

@@ -1,6 +1,2 @@
 class Coins extends Collectable {
-
-
-
-    
-}
+};

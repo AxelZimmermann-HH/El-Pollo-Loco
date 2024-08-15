@@ -19,18 +19,20 @@ class Collectable extends MovableObject {
         if (imagePath.includes('coin')) {
             this.loadImages(this.IMAGES_COIN);
             this.animate();
-        }
+        };
         
         this.x = x;
         this.y = y;
         this.width = w;
         this.height = h; 
-
     }
 
+    /**
+     * Animates the static coins.
+     */
     animate() {
         setInterval(() => {
             this.playAnimation(this.IMAGES_COIN);
         }, 500);
-     }
-}
+     };
+};

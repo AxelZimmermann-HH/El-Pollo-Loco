@@ -4,6 +4,8 @@ let keyboard = new Keyboard();
 let backgroundMusic;
 let isSoundOn = true;
 let globalVolume = 0.5;
+let globalNewLevel;
+
 
 const keyMap = {
     32: 'SPACE',
@@ -23,9 +25,9 @@ const mobileButtons = [
 
 const touchHandlers = {
     'btn-sound': toggleSound,
-    'btn-fullscreen': (e) => toggleFullScreen(e),
-    'button2': resetGameMobile,
-    'load-level': loadLevel
+    'button2': resetGame,
+    'load-level': () => {loadLevel(globalNewLevel);},
+    'btn-back': () => moveBack()
 };
 
 /**
@@ -44,59 +46,148 @@ function init() {
  * Loads the level in the world and runs via onclick on the play-button. Ensures that
  * the level isn't running before starting the game.
  */
-function loadLevel() {
+function loadLevel(level = level1) {
+    loadSoundState();
+
     document.getElementById('canvas-container').classList.add('d-block');
     document.getElementById('menu').classList.add('d-none');
-    world.loadLevel(level1);
+    document.getElementById('button2').classList.add('d-none');
+    world.setLevel(level);
+    
     backgroundMusic.play();
-
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
-        document.getElementById('canvas').scrollIntoView({ behavior: 'smooth' });}
+    mobileScroll();
 };
 
+
 /**
- * Is needed for reset the game. If there is "start" in the URL, the level is loaded directly.
+ * Ensures the scroll to canvas on mobile and then disables the overflow.
  */
-function checkStartParameter() {
-    const urlParams = new URLSearchParams(window.location.search);
+function mobileScroll() {
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+        document.getElementById('canvas').scrollIntoView({ behavior: 'smooth' });
+    };
+    setTimeout(() => {
+        document.body.style.overflow = 'hidden';
+    }, 500);
+}
 
-    if (urlParams.get('start')) {
-        loadLevel();
+/**
+ * Clears the current world and sets a new one.
+ */
+function reloadWorld() {
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+    if (world) {
+        if (world.level && world.level.endboss && world.level.endboss[0]) {
+            world.level.endboss[0].stopWinSound();
+        }
+        world.clearWorld();
     }
+    let canvasContext = canvas.getContext('2d');
+    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+
+    world = new World(canvas, keyboard);
 };
 
 /**
- * Resets the game by reloading the site with a new parameter, then init() is running again and 
- * checkStartParameter() ensures that loadLevel() runs directly.
+ * Resets the game by clearing the world, adding new world, creating a new level and load it.
  */
 function resetGame() {
-    const newUrl = location.origin + location.pathname + '?start=true';
-    location.href = newUrl;
+    reloadWorld();
+    let newLevel = createLevelNew();  
+    loadLevel(newLevel);
 };
 
 /**
- * Has the same function as resetGame(), but runs on touchend on mobile devices via eventListener.
- * Ensures that reloading is possible.
+ * Runs ontouch of the back-button responsive. Reloads world but in difference to resetGame()
+ * not loading the level already.
  */
-function resetGameMobile() {
-    const newUrl = location.origin + location.pathname + '?start=true#canvas';
+function moveBack() {
+    reloadWorld();
+    let newLevel = createLevelNew();
+    globalNewLevel = newLevel;
 
-    if (location.href === newUrl) {
-        location.reload();
-    } else {
-        setTimeout(() => {
-            location.href = newUrl;
-        }, 100);
-    }
+    document.getElementById('canvas-container').classList.remove('d-block');
+    document.getElementById('menu').classList.remove('d-none');
+    document.body.style.overflow = 'auto';
 };
 
 /**
- * Displays the info layer with description of the keys needed.
+ * Displays the info layer or the legal notice layer with description of the keys needed.
  */
-function showInfoLayer() {
+function showInfoLayer(img) {
     let infoLayer = document.getElementById('info-layer'); 
     infoLayer.classList.remove('d-none');
+    infoLayer.innerHTML = '';
+
+    if (img.src.includes('impr')) {
+        infoLayer.innerHTML += getImprHTML();
+    } else {
+        infoLayer.innerHTML += getInfoHTML();
+    };
 };
+
+/**
+ * @returns the HTML code for info layer
+ */
+function getInfoHTML() {
+    return `
+        <div id="info-inner-layer">
+            <div onclick="closeInfoLayer()" class="close">
+                <img src="./img/close.svg" alt="">
+            </div>
+            <table>
+                <tr>
+                    <td><p>">"</p></td>
+                    <td><p class="right">RIGHT</p></td>
+                </tr>
+                <tr>
+                    <td><p>"&lt;"</p></td>
+                    <td><p class="right">LEFT</p></td>
+                </tr>
+                <tr>
+                    <td><p>"SPACE"</p></td>
+                    <td><p class="right">JUMP</p></td>
+                </tr>
+                <tr>
+                    <td><p>"D"</p></td>
+                    <td><p class="right">THROW</p></td>
+                </tr>
+            </table>
+        </div>
+    `;
+};
+
+/**
+ * @returns the HTML code for legal notice
+ */
+function getImprHTML() {
+    return `
+    <div id="info-inner-layer">
+            <div class="impressum-out">
+                <div onclick="closeInfoLayer()" class="close">
+                    <img src="./img/close.svg" alt="">
+                </div>
+                <div class="impressum">
+                    <h1>Impressum</h1>
+                    <p>Axel Zimmermann</p>
+                    <p>Fuhlsbüttler Straße 415C</p>
+                    <p>22309 Hamburg</p>
+                    
+
+                    <h3>Kontakt</h3>
+                    <p>Telefon: +49 (40) 51 444 101</p>
+                    <p>E-Mail: a.zimmermann@cash-online.de</p>
+
+                    <h3>Redaktionell verantwortlich</h3>
+                    <p>Axel Zimmermann</p>
+                    <p>Fuhlsbüttler Straße 415C</p>
+                    <p>22309 Hamburg</p>
+                </div>
+            </div>
+        </div>
+    `
+}
 
 /**
  * Hides the info layer with description of the keys needed.
@@ -136,12 +227,12 @@ function pauseBackgroundMusic() {
  * Not relevant for muting the game.
  */
 function restartBackgroundMusic() {
-    backgroundMusic.currentTime = 0; // Musik von vorn starten
+    backgroundMusic.currentTime = 0; 
     backgroundMusic.play();
 };
 
 /**
- * Mutes and demutes the global sound of the game.
+ * Mutes and demutes the global sound of the game. At the end saves the stat in localStorage.
  */
 function toggleSound() {
     if (isSoundOn) {
@@ -155,6 +246,27 @@ function toggleSound() {
     };
     isSoundOn = !isSoundOn;
     backgroundMusic.volume = globalVolume; 
+    localStorage.setItem('isSoundOn', isSoundOn);
+};
+
+/**
+ * Reloads the current sound state, loud or mute, from localStorage.
+ */
+function loadSoundState() {
+    let savedSoundState = localStorage.getItem('isSoundOn');
+    if (savedSoundState !== null) {
+        isSoundOn = (savedSoundState === 'true'); 
+        if (isSoundOn) {
+            globalVolume = 0.5;
+            document.getElementById('sound').src = "img/sound-on.png";
+            document.getElementById('btn-sound').src = "img/sound-on.png";
+        } else {
+            globalVolume = 0;
+            document.getElementById('sound').src = "img/sound-off.png";
+            document.getElementById('btn-sound').src = "img/sound-off.png";
+        };
+        backgroundMusic.volume = globalVolume;
+    };
 };
 
 /**
@@ -191,8 +303,8 @@ mobileButtons.forEach(button => {
  */
 function mobileTouchstart(button, element) {
     keyboard[button.key] = true;
-    element.style.transform = 'scale(0.9)'; // Verkleinern der Schaltfläche
-    element.style.transition = 'transform 0.1s ease'; // Übergangseffekt hinzufügen
+    element.style.transform = 'scale(0.9)'; 
+    element.style.transition = 'transform 0.1s ease'; 
 };
 
 /**
@@ -202,8 +314,8 @@ function mobileTouchstart(button, element) {
  */
 function mobileTouchend(button, element) {
     keyboard[button.key] = false;
-    element.style.transform = 'scale(1)'; // Zurück zur Originalgröße
-    element.style.transition = 'transform 0.1s ease'; // Übergangseffekt hinzufügen
+    element.style.transform = 'scale(1)'; 
+    element.style.transition = 'transform 0.1s ease'; 
 };
 
 /**

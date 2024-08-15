@@ -11,10 +11,6 @@ class Chicken extends MovableObject {
     ];
 
     IMAGE_DEAD = 'img/3_enemies_chicken/chicken_normal/2_dead/dead.png';
-    
-    
-    
-    
 
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
@@ -22,15 +18,21 @@ class Chicken extends MovableObject {
         this.x = 500 + Math.random() * 2500; //überschreibt die Koordinate aus movableObject
         this.speed = 0.15 + Math.random() * 0.8 ;
         // this.animate();
-    }
+    };
 
+    /**
+     * Runs the animation of the chicken.
+     */
     startAnimation() {
         if (!this.animationStarted) {
             this.animationStarted = true;
             this.animate();
-        }
-    }
+        };
+    };
 
+    /**
+     * Animates the movement left and the changing walking images.
+     */
     animate() {
         this.moveInterval = setInterval(() => {
             this.moveLeft();
@@ -39,9 +41,11 @@ class Chicken extends MovableObject {
         this.animationInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
         }, 200);
-    }
+    };
 
-
+    /**
+     * Animates the dead chicken including sound.
+     */
     defeat() {
         clearInterval(this.moveInterval);
         clearInterval(this.animationInterval);
@@ -53,5 +57,5 @@ class Chicken extends MovableObject {
         setTimeout(() => {
             this.y = -1000; // Bewegt das Bild aus dem sichtbaren Bereich
         }, 500);
-    }
-}
+    };
+};

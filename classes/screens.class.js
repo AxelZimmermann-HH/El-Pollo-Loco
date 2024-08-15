@@ -1,15 +1,17 @@
 class Screen extends DrawableObject {
+    
     height = 480;
-
 
     constructor(path, x, y, width) {
         super().loadImage(path);
         this.x = x;
         this.y = y;
         this. width = width;
+    };
 
-    }
-
+    /**
+     * Animates the bounce effect of the winning screen.
+     */
     bounce() {
         let targetY = 0;
         let bounceHeight = 50;
@@ -20,9 +22,8 @@ class Screen extends DrawableObject {
             currentStep++;
             if (currentStep > animationSteps) {
                 clearInterval(interval);
-                this.y = targetY; // Ensure it ends exactly at the target position
-            }
-        }, 1000 / 60); // 60 FPS
-    }
-
-}
+                this.y = targetY; 
+            };
+        }, 1000 / 60); 
+    };
+};

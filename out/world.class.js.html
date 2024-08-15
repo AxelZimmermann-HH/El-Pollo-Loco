@@ -1,4 +1,32 @@
-class World {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: world.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: world.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>class World {
 
     character = new Character();  
     throwableObjects = [];
@@ -15,7 +43,6 @@ class World {
     invulnerability = false;
     throwCooldown = false;
     characterControlEnabled = true;
-    throwEnabled = true;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -90,7 +117,7 @@ class World {
         let characterBottom = this.character.y + this.character.height - thisCollisionBox.heightAdjustment;
         let enemyTop = enemy.y + enemyCollisionBox.offsetY;
 
-        if (characterBottom <= enemyTop + 5 && this.character.speedY < 0) {
+        if (characterBottom &lt;= enemyTop + 5 &amp;&amp; this.character.speedY &lt; 0) {
             enemiesToDefeat.push(enemy);
             this.setInvulnerability(50);
         } else if (!this.invulnerability) {
@@ -143,12 +170,12 @@ class World {
                 let coinSound = new Audio('audio/coin.mov');
                 coinSound.volume = globalVolume * 2; 
                 coinSound.play();
-                coin.y = -1000;  // Setze die Münze außerhalb des Sichtfelds
+                coin.y = -1000;
                 this.statusCoins.currentCoins++;
                 this.statusCoins.updateCoinBar();
             }
         });
-    }
+    };
 
     /**
      * Defines the action after colliding with bottles objects.
@@ -161,7 +188,7 @@ class World {
                 drinkSound.volume = globalVolume;
                 drinkSound.play();
                 bottle.y = -1000;
-                if (this.statusBottles.currentBottles < 5) {
+                if (this.statusBottles.currentBottles &lt; 5) {
                     this.statusBottles.currentBottles++;
                     this.statusBottles.updateBottleBar();
                 }
@@ -175,7 +202,7 @@ class World {
      * and the status bar is updated.
      */
     checkThrowObjects() {
-        if (this.keyboard.THR && this.statusBottles.currentBottles > 0 && !this.throwCooldown && this.throwEnabled) {
+        if (this.keyboard.THR &amp;&amp; this.statusBottles.currentBottles > 0 &amp;&amp; !this.throwCooldown) {
             let bottle = new ThrowableObject(this, this.character.x + 60, this.character.y + 100);
             this.throwableObjects.push(bottle);
             this.statusBottles.currentBottles--;
@@ -303,7 +330,7 @@ class World {
         this.ctx.translate(mo.width, 0); 
         this.ctx.scale(-1, 1); 
         mo.x = mo.x * -1; 
-    };
+    }
 
     /**
      * Re-Mirrors an object, in this case the character when walking forwards again.
@@ -318,62 +345,12 @@ class World {
      * Loads all level elements included in level.js
      * @param {class} level 
      */
-    setLevel(level) {
+    loadLevel(level) {
         this.level = level;
-    
         this.initializeEnemiesAndBosses(this.level.enemies, 'startAnimation');
         this.initializeEnemiesAndBosses(this.level.endboss, 'animate');
-    
-        setTimeout(() => {
-            this.run();
-        }, 100);
+        this.run();
     };
-
-    /**
-     * Clears the world with all elements, also from the level.
-     */
-    clearWorld() {
-        this.level.enemies.forEach(enemy => {
-            if (enemy.checkCharacterPositionInterval) {
-                clearInterval(enemy.checkCharacterPositionInterval);
-            }
-            if (enemy.animationStarted) {
-                enemy.animationStarted = false; 
-            }
-        });
-    
-        this.level.endboss.forEach(boss => {
-            if (boss.checkCharacterPositionInterval) {
-                clearInterval(boss.checkCharacterPositionInterval);
-            }
-            if (boss.animationStarted) {
-                boss.animationStarted = false; 
-            }
-        });
-    
-        this.level.enemies = [];  
-        this.level.endboss = [];  
-        this.level.clouds = [];  
-        this.level.bgObjects = [];  
-        this.level.coins = [];  
-        this.level.bottles = [];  
-     
-        this.throwableObjects = [];
-        this.camera_x = 0;
-     
-        this.character = new Character(); 
-        this.characterControlEnabled = true; 
-        this.invulnerability = false; 
-        this.throwCooldown = false; 
-        this.throwEnabled = true; 
-    
-        this.statusBottles = new StatusBottles();
-        this.statusCoins = new StatusCoins(this.statusBottles);
-        this.statusHealth = new StatusHealth();
-        this.statusEnemy = new StatusEnemy();
-    };
-    
-    
 
     /**
      * Initializes objects, used in loadLevel().
@@ -381,12 +358,33 @@ class World {
      * @param {function} animationMethod 
      */
     initializeEnemiesAndBosses(objects, animationMethod) {
-        if (!Array.isArray(objects)) return;
         objects.forEach(obj => {
             obj.world = this; 
             if (obj[animationMethod]) {
                 obj[animationMethod](); 
             }
         });
-    }
-};
+    };
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Aug 13 2024 14:08:50 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

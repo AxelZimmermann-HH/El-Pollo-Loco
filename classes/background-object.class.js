@@ -1,4 +1,5 @@
 class BgObject extends MovableObject {
+    
     width = 721;  
     height = 405; 
 
@@ -6,5 +7,5 @@ class BgObject extends MovableObject {
         super().loadImage(imagePath);
         this.x = x;
         this.y = y;
-    }
-}
+    };
+};

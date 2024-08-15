@@ -20,6 +20,12 @@ class StatusEnemy extends DrawableObject {
         this.height= 64;
     };
 
+    /**
+     * Reduces the value of endBossEnergy and loads the depending image in the status bar.
+     * Selects if the endboss is hurt or dead.
+     * @param {object} endboss 
+     * @param {number} number 
+     */
     reduceEnergy(endboss, number) {
         this.endbossEnergy--;
         if (this.endbossEnergy < 0) this.endbossEnergy = 0;
@@ -30,6 +36,6 @@ class StatusEnemy extends DrawableObject {
             boss.hurt();
         } else {
             boss.dead();
-        }
-    }
-}
+        };
+    };
+};

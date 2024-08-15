@@ -6,7 +6,6 @@
     <title>El Pollo Loco</title>
     <link rel="icon" type="image/png" href="./img/favicon/favicon.png">
     <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./layer-style.css">
     
     <script src="./classes/drawable-object.class.js"></script>
     <script src="./classes/movable-object.class.js"></script>
@@ -30,23 +29,22 @@
     <script src="./classes/endboss.class.js"></script>
     <script src="./levels/level1.js"></script> 
     <script src="./js/game.js" defer></script>
+    <script src="./js/createLevelNew.js" defer></script>
 </head>
 
-<body onload="init(); checkStartParameter();">
+<body onload="init()">
 
     <a href="./index.html">
         <img class="logo" src="./img/logo.png" alt="">
     </a>
 
     <div class="menu" id="menu">
-        <img onclick="showInfoLayer()"src="./img/help.png" alt="">
+        <img onclick="showInfoLayer(this)"src="./img/impr.png" alt="">
+        <img onclick="showInfoLayer(this)"src="./img/help.png" alt="">
         <img id="load-level" onclick="loadLevel()" src="./img/play.png" alt="">
     </div>
 
     <div id="canvas-container">
-        <a href="index.html?start=true">
-            <img class="restart" src="./img/restart.png" alt="">
-        </a>
         <a onclick="toggleSound()" href="#">
             <img onclick="" class="restart  sound-off" id="sound" src="img/sound-on.png" alt="">
         </a>
@@ -61,8 +59,8 @@
                     <img id="btn-right" src="img/right.png" alt="">
                 </div>  
                 <div class="res-menu-group">
-                    <img id="btn-fullscreen" src="img/full.png" alt="">
                     <img id="btn-sound" class="sound-img" src="img/sound-on.png" alt="">
+                    <img id="btn-back" class="back-img" src="img/back.png" alt="">
                 </div> 
                 <div class="res-menu-group">
                     <img id="btn-jump" src="img/jump.png" alt="">
@@ -76,31 +74,7 @@
 
     <!-- INFO-LAYER -->
 
-    <div id="info-layer" class="d-none">
-        <div id="info-inner-layer">
-            <div onclick="closeInfoLayer()" class="close">
-                <img src="./img/close.svg" alt="">
-            </div>
-            <table>
-                <tr>
-                    <td><p>">"</p></td>
-                    <td><p class="right">RIGHT</p></td>
-                </tr>
-                <tr>
-                    <td><p>"&lt;"</p></td>
-                    <td><p class="right">LEFT</p></td>
-                </tr>
-                <tr>
-                    <td><p>"SPACE"</p></td>
-                    <td><p class="right">JUMP</p></td>
-                </tr>
-                <tr>
-                    <td><p>"D"</p></td>
-                    <td><p class="right">THROW</p></td>
-                </tr>
-            </table>
-        </div>
-    </div>
+    <div id="info-layer" class="d-none"></div>
 
     <!-- TURN-SCREEN-LAYER -->
 
